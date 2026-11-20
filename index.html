@@ -3,114 +3,380 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>IT Help Desk</title>
+  <title>IT Help Desk – The Ceylon Chamber of Commerce</title>
   <style>
-    :root{--bg:#f2f5f7;--cd:#fff;--tx:#12202b;--mu:#62727f;--bd:#dde4ea;--ac:#0f766e;--ac2:#e0f2f0;--er:#c2410c;--er2:#ffedd5;--ok:#15803d;--ok2:#dcfce7;--wa:#a16207;--wa2:#fef3c7;color-scheme:light}
-    @media(prefers-color-scheme:dark){:root{--bg:#0e1519;--cd:#162027;--tx:#e6edf2;--mu:#92a3b0;--bd:#26343e;--ac:#2dd4bf;--ac2:#12332f;--er:#fdba74;--er2:#3a2111;--ok:#86efac;--ok2:#12301d;--wa:#fcd34d;--wa2:#35290c;color-scheme:dark}}
+    :root{
+      --bg:#f6f3f2;
+      --cd:#ffffff;
+      --tx:#1f1414;
+      --mu:#6b5b5b;
+      --bd:#e4d9d8;
+      --ac:#6e1d1d;      /* Chamber dark brownish-red */
+      --ac-h:#541414;    /* Hover dark crimson-brown */
+      --ac2:#f7e9e9;     /* Soft tint */
+      --gold:#c9a24b;    /* Chamber gold accent */
+      --er:#b91c1c;
+      --er2:#fee2e2;
+      --ok:#15803d;
+      --ok2:#dcfce7;
+      --wa:#a16207;
+      --wa2:#fef3c7;
+      --sh:0 8px 24px rgba(58,16,16,.07);
+      --sh-sm:0 2px 8px rgba(58,16,16,.05);
+      color-scheme:light;
+    }
+    @media(prefers-color-scheme:dark){
+      :root{
+        --bg:#140e0e;
+        --cd:#1f1616;
+        --tx:#f5eded;
+        --mu:#b39e9e;
+        --bd:#362626;
+        --ac:#d96b6b;
+        --ac-h:#e58585;
+        --ac2:#331c1c;
+        --gold:#d8b35c;
+        --er:#fca5a5;
+        --er2:#3f1818;
+        --ok:#86efac;
+        --ok2:#13301d;
+        --wa:#fcd34d;
+        --wa2:#35290c;
+        --sh:0 10px 28px rgba(0,0,0,.35);
+        --sh-sm:0 2px 10px rgba(0,0,0,.25);
+        color-scheme:dark;
+      }
+    }
     *{box-sizing:border-box}
-    body{margin:0;font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx);touch-action:manipulation}
+    body{
+      margin:0;
+      font:14px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+      background:var(--bg);
+      color:var(--tx);
+      touch-action:manipulation;
+      -webkit-font-smoothing:antialiased;
+    }
     .hide{display:none!important}
     .mu{color:var(--mu)}
-    h1,h2,h3{margin:0;letter-spacing:-.01em}
+    h1,h2,h3{margin:0;letter-spacing:-.015em}
     h2{font-size:19px}
-    h3{font-size:14px;margin:18px 0 8px}
-    input,select,textarea,.btn{font:inherit;color:inherit;border:1px solid var(--bd);background:var(--cd);border-radius:8px;padding:8px 11px;pointer-events:auto;user-select:auto;-webkit-user-select:auto;touch-action:manipulation}
-    textarea{width:100%;min-height:90px;resize:vertical}
+    h3{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--mu);margin:20px 0 8px}
+
+    input,select,textarea,.btn{
+      font:inherit;
+      color:inherit;
+      border:1px solid var(--bd);
+      background:var(--cd);
+      border-radius:10px;
+      padding:9px 12px;
+      pointer-events:auto;
+      user-select:auto;
+      -webkit-user-select:auto;
+      touch-action:manipulation;
+      transition:border-color .15s,box-shadow .15s,background .15s;
+    }
+    input:focus,select:focus,textarea:focus{
+      outline:none;
+      border-color:var(--ac);
+      box-shadow:0 0 0 3px var(--ac2);
+    }
+    textarea{width:100%;min-height:96px;resize:vertical}
     input,select{min-width:0}
-    .btn{cursor:pointer;font-weight:600}
-    .btn:hover{border-color:var(--ac)}
-    .btn.p{background:var(--ac);border-color:var(--ac);color:var(--bg)}
-    .btn:disabled{opacity:.5;cursor:wait}
+
+    .btn{
+      cursor:pointer;
+      font-weight:600;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      box-shadow:var(--sh-sm);
+    }
+    .btn:hover{border-color:var(--ac);background:var(--ac2)}
+    .btn.p{
+      background:linear-gradient(135deg,#782020,#561515);
+      border-color:#561515;
+      color:#fff;
+    }
+    .btn.p:hover{
+      background:linear-gradient(135deg,#8a2626,#631818);
+      border-color:#631818;
+    }
+    .btn:disabled{opacity:.55;cursor:wait}
     :focus-visible{outline:2px solid var(--ac);outline-offset:2px}
-    .login{min-height:100vh;display:grid;place-items:center;padding:16px;position:relative;z-index:1}
-    .lc{width:100%;max-width:380px;display:grid;gap:12px;padding:28px;background:var(--cd);border:1px solid var(--bd);border-radius:14px;position:relative;z-index:2}
-    .lc input{width:100%}
-    .lc h1{font-size:24px}
-    .top{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;padding:10px 18px;background:var(--cd);border-bottom:1px solid var(--bd)}
-    .top nav{display:flex;gap:2px;margin-left:14px}
-    .top nav button{border:0;background:none;color:var(--mu);font:inherit;font-weight:600;padding:6px 12px;border-radius:8px;cursor:pointer}
-    .top nav button.on{background:var(--ac2);color:var(--ac)}
+
+    /* Login Card */
+    .login{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:20px;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(110,29,29,.12), transparent 42%),
+        radial-gradient(circle at 85% 85%, rgba(201,162,75,.14), transparent 45%),
+        var(--bg);
+      position:relative;
+      z-index:1;
+    }
+    .lc{
+      width:100%;
+      max-width:410px;
+      display:grid;
+      gap:14px;
+      padding:30px 28px;
+      background:var(--cd);
+      border:1px solid var(--bd);
+      border-top:5px solid #6e1d1d;
+      border-radius:18px;
+      box-shadow:var(--sh);
+      position:relative;
+      z-index:2;
+    }
+    .brand-box{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding-bottom:10px;
+      border-bottom:1px solid var(--bd);
+    }
+    .brand-logo{
+      height:44px;
+      width:auto;
+      border-radius:8px;
+      background:#fff;
+      padding:4px;
+      border:1px solid var(--bd);
+      object-fit:contain;
+    }
+    .brand-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ac)}
+    .lc input{width:100%;padding:11px 13px;font-size:15px}
+    .lc h1{font-size:23px;margin-top:2px}
+
+    /* Top Header */
+    .top{
+      position:sticky;
+      top:0;
+      z-index:5;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:10px 20px;
+      background:linear-gradient(135deg,#661a1a,#491111);
+      color:#fff;
+      border-bottom:3px solid var(--gold);
+      box-shadow:0 3px 14px rgba(45,10,10,.22);
+    }
+    .top-brand{display:flex;align-items:center;gap:10px}
+    .top-brand img{height:34px;border-radius:7px;background:#fff;padding:3px;object-fit:contain}
+    .top-brand .t-wrap{display:flex;flex-direction:column;line-height:1.15}
+    .top-brand b{font-size:15px;letter-spacing:-.01em}
+    .top-brand small{font-size:11px;opacity:.82}
+    .top nav{display:flex;gap:4px;margin-left:14px}
+    .top nav button{
+      border:0;
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.85);
+      font:inherit;
+      font-weight:600;
+      padding:6px 14px;
+      border-radius:9px;
+      cursor:pointer;
+      transition:background .15s,color .15s;
+    }
+    .top nav button:hover{background:rgba(255,255,255,.18);color:#fff}
+    .top nav button.on{background:#fff;color:#5c1616}
+    .top .btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28);color:#fff;box-shadow:none}
+    .top .btn:hover{background:rgba(255,255,255,.22);border-color:#fff}
+    .top .btn.p{background:var(--gold);border-color:var(--gold);color:#261111;font-weight:700}
+    .top .btn.p:hover{background:#d8b25a;border-color:#d8b25a}
     .sp{flex:1}
-    main{max-width:1000px;margin:0 auto;padding:18px}
-    .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    .bar input{flex:1;min-width:180px}
-    .row{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:11px 14px;margin-bottom:8px;cursor:pointer}
-    .row:hover{border-color:var(--ac)}
+
+    main{max-width:1040px;margin:0 auto;padding:20px}
+    .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .bar input{flex:1;min-width:200px}
+
+    /* Ticket Cards */
+    .row{
+      background:var(--cd);
+      border:1px solid var(--bd);
+      border-left:4px solid transparent;
+      border-radius:12px;
+      padding:13px 16px;
+      margin-bottom:10px;
+      cursor:pointer;
+      box-shadow:var(--sh-sm);
+      transition:transform .12s,border-color .15s,box-shadow .15s;
+    }
+    .row:hover{
+      border-color:var(--ac);
+      border-left-color:var(--ac);
+      transform:translateY(-1px);
+      box-shadow:var(--sh);
+    }
     .r1{display:flex;gap:10px;align-items:baseline}
-    .r1 b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .id{font-size:12px;color:var(--mu);font-variant-numeric:tabular-nums;white-space:nowrap}
-    .r2{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:5px;font-size:12px}
-    .chip{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:600;background:var(--bg);border:1px solid var(--bd)}
+    .r1 b{font-weight:650;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .id{font-size:12px;font-weight:700;color:var(--ac);font-variant-numeric:tabular-nums;white-space:nowrap}
+    .r2{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:7px;font-size:12px}
+
+    .chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:11.5px;font-weight:600;background:var(--bg);border:1px solid var(--bd)}
     .s-New,.s-Assigned{background:var(--ac2);color:var(--ac);border-color:transparent}
     .s-InProgress{background:var(--wa2);color:var(--wa);border-color:transparent}
     .s-WaitingonUser{background:var(--er2);color:var(--er);border-color:transparent}
     .s-Resolved,.s-Closed{background:var(--ok2);color:var(--ok);border-color:transparent}
     .p-Critical,.over{background:var(--er2);color:var(--er);border-color:transparent}
-    .p-High{color:var(--wa)}
-    .empty{text-align:center;padding:48px 12px;color:var(--mu)}
-    .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
-    .kpi{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:12px 14px}
-    .kpi b{display:block;font-size:26px;line-height:1.2;font-variant-numeric:tabular-nums}
-    .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
-    .panel{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:14px}
-    .br{display:grid;grid-template-columns:120px 1fr 30px;gap:8px;align-items:center;margin:6px 0;font-size:13px}
-    .br i{display:block;height:8px;border-radius:4px;background:var(--ac)}
-    .drawer{position:fixed;top:0;right:0;height:100%;width:min(560px,100%);background:var(--bg);border-left:1px solid var(--bd);overflow:auto;transform:translateX(105%);transition:transform .2s;z-index:10}
+    .p-High{background:var(--wa2);color:var(--wa);border-color:transparent}
+
+    .empty{
+      text-align:center;
+      padding:52px 16px;
+      color:var(--mu);
+      background:var(--cd);
+      border:1px dashed var(--bd);
+      border-radius:14px;
+    }
+
+    /* Dashboard */
+    .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:18px}
+    .kpi{
+      background:var(--cd);
+      border:1px solid var(--bd);
+      border-top:3px solid var(--ac);
+      border-radius:12px;
+      padding:14px 16px;
+      box-shadow:var(--sh-sm);
+    }
+    .kpi b{display:block;font-size:28px;line-height:1.2;margin-top:4px;font-variant-numeric:tabular-nums;color:var(--ac)}
+    .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+    .panel{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:16px;box-shadow:var(--sh-sm)}
+    .panel h3{margin-top:0}
+    .br{display:grid;grid-template-columns:130px 1fr 32px;gap:10px;align-items:center;margin:8px 0;font-size:13px}
+    .br i{display:block;height:9px;border-radius:99px;background:linear-gradient(90deg,#7c2323,var(--gold))}
+
+    /* Drawer */
+    .drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      height:100%;
+      width:min(580px,100%);
+      background:var(--bg);
+      border-left:1px solid var(--bd);
+      box-shadow:-8px 0 30px rgba(0,0,0,.15);
+      overflow:auto;
+      transform:translateX(105%);
+      transition:transform .22s ease;
+      z-index:10;
+    }
     .drawer.open{transform:none}
-    .pad{padding:18px}
-    .dh{display:flex;justify-content:space-between;gap:10px}
-    .desc{white-space:pre-wrap;background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:12px;margin:10px 0}
-    .ctl{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .ctl label{font-size:12px;color:var(--mu)}
+    .pad{padding:20px}
+    .dh{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .desc{white-space:pre-wrap;background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:12px 0;box-shadow:var(--sh-sm)}
+    .ctl{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:var(--cd);padding:12px;border-radius:12px;border:1px solid var(--bd)}
+    .ctl label{font-size:12px;font-weight:600;color:var(--mu);display:block;margin-bottom:4px}
     .ctl select{width:100%}
-    .cm{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:9px 12px;margin-bottom:8px;white-space:pre-wrap}
-    .cm.in{background:var(--wa2)}
-    .cm small{display:block;color:var(--mu)}
-    .ra{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-    .stars button{border:0;background:none;font-size:24px;cursor:pointer;color:var(--wa)}
-    .modal{position:fixed;inset:0;background:#0008;display:grid;place-items:center;padding:14px;z-index:20}
-    .mb{width:100%;max-width:520px;background:var(--cd);border-radius:14px;padding:20px;display:grid;gap:10px;max-height:94vh;overflow:auto}
+    .cm{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:10px 14px;margin-bottom:8px;white-space:pre-wrap;box-shadow:var(--sh-sm)}
+    .cm.in{background:var(--wa2);border-color:rgba(161,98,7,.25)}
+    .cm small{display:block;color:var(--mu);margin-bottom:3px;font-weight:600}
+    .ra{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px}
+    .stars button{border:0;background:none;font-size:26px;cursor:pointer;color:var(--gold);padding:2px 4px}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(20,8,8,.58);backdrop-filter:blur(2px);display:grid;place-items:center;padding:14px;z-index:20}
+    .mb{
+      width:100%;
+      max-width:540px;
+      background:var(--cd);
+      border:1px solid var(--bd);
+      border-top:4px solid #6e1d1d;
+      border-radius:16px;
+      padding:22px;
+      display:grid;
+      gap:11px;
+      max-height:94vh;
+      overflow:auto;
+      box-shadow:var(--sh);
+    }
     .mb input,.mb select{width:100%}
-    .mb label{font-size:12px;color:var(--mu);display:grid;gap:3px}
-    #toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,80px);background:var(--tx);color:var(--bg);padding:9px 16px;border-radius:99px;transition:transform .2s;z-index:30;pointer-events:none}
+    .mb label{font-size:12px;font-weight:600;color:var(--mu);display:grid;gap:4px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+    /* Toast */
+    #toast{
+      position:fixed;
+      bottom:20px;
+      left:50%;
+      transform:translate(-50%,90px);
+      background:#2b1111;
+      color:#fff;
+      border:1px solid var(--gold);
+      padding:10px 18px;
+      border-radius:99px;
+      font-weight:600;
+      box-shadow:var(--sh);
+      transition:transform .2s;
+      z-index:30;
+      pointer-events:none;
+    }
     #toast.show{transform:translate(-50%,0)}
-    #toast.err{background:var(--er);color:#fff}
-    @media(max-width:600px){.top nav{margin-left:0}.top b{display:none}main{padding:12px}}
+    #toast.err{background:var(--er);border-color:#fff;color:#fff}
+
+    .footer-note{text-align:center;font-size:11.5px;color:var(--mu);margin-top:24px;padding-bottom:10px}
+
+    @media(max-width:640px){
+      .top{padding:10px 12px;gap:8px}
+      .top nav{margin-left:4px}
+      .top-brand .t-wrap small,.top-brand b{display:none}
+      main{padding:14px}
+      .two-col,.ctl{grid-template-columns:1fr}
+    }
     @media(prefers-reduced-motion:reduce){*{transition:none!important}}
   </style>
 </head>
 <body>
   <div id="login" class="login hide">
     <div class="lc">
-      <h1>IT Help Desk</h1>
-      <p class="mu" style="margin:0">Sign in with your work email. We’ll send you a 6-digit code.</p>
+      <div class="brand-box">
+        <img class="brand-logo" src="https://www.chamber.lk/wp-content/uploads/2024/09/ccc-logo-lg.jpg" alt="The Ceylon Chamber of Commerce">
+        <div>
+          <div class="brand-title">The Ceylon Chamber of Commerce</div>
+          <h1>IT Help Desk</h1>
+        </div>
+      </div>
+      <p class="mu" style="margin:0">Sign in with your Chamber work email. We’ll send you a 6-digit verification code.</p>
       <div id="l1" style="display:grid;gap:10px">
-        <input id="em" type="email" inputmode="email" placeholder="you@company.com" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false">
-        <button class="btn p" id="send" type="button">Send code</button>
+        <input id="em" type="email" inputmode="email" placeholder="you@chamber.lk" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <button class="btn p" id="send" type="button">Send verification code</button>
       </div>
       <div id="l2" class="hide" style="display:grid;gap:10px">
-        <input id="cd" type="text" inputmode="numeric" maxlength="6" placeholder="6-digit code" autocomplete="one-time-code">
+        <input id="cd" type="text" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit code" autocomplete="one-time-code">
         <button class="btn p" id="go" type="button">Sign in</button>
-        <a href="#" id="back" class="mu">Use a different email</a>
+        <a href="#" id="back" class="mu" style="font-size:13px">Use a different email</a>
       </div>
     </div>
   </div>
 
   <div id="app" class="hide">
     <header class="top">
-      <b>IT Help Desk</b>
+      <div class="top-brand">
+        <img src="https://www.chamber.lk/wp-content/uploads/2024/09/ccc-logo-lg.jpg" alt="CCC Logo">
+        <div class="t-wrap">
+          <b>IT Help Desk</b>
+          <small>The Ceylon Chamber of Commerce</small>
+        </div>
+      </div>
       <nav>
         <button data-v="tickets" class="on" type="button">Tickets</button>
         <button data-v="dash" id="navd" type="button">Dashboard</button>
       </nav>
       <span class="sp"></span>
-      <button class="btn p" id="nt" type="button">New ticket</button>
+      <button class="btn p" id="nt" type="button">+ New ticket</button>
       <button class="btn" id="out" type="button">Sign out</button>
     </header>
+
     <main>
       <section id="v-tickets">
         <div class="bar">
-          <input id="q" type="search" placeholder="Search tickets…">
+          <input id="q" type="search" placeholder="Search tickets by ID, subject, or user…">
           <select id="fs"></select>
           <select id="fp"></select>
           <select id="fa" class="hide"></select>
@@ -118,6 +384,7 @@
         <div id="rows"></div>
       </section>
       <section id="v-dash" class="hide"></section>
+      <div class="footer-note">The Ceylon Chamber of Commerce • IT Department</div>
     </main>
   </div>
 
@@ -130,7 +397,7 @@
     const ST = ['New','Assigned','In Progress','Waiting on User','Resolved','Closed'], OPEN = ST.slice(0,4), PR = ['Low','Medium','High','Critical'];
     const $ = s => document.querySelector(s);
     const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    const S = {token:localStorage.tok||'',user:null,tickets:[],cats:[],slas:[],it:[],view:'tickets',f:{q:'',st:'open',pr:'',as:''},cur:null,cm:[]};
+    const S = {token:localStorage.tok||'',user:null,tickets:[],cats:[],slas:[],it:[],users:[],view:'tickets',f:{q:'',st:'open',pr:'',as:''},cur:null,cm:[]};
     const isIT = () => S.user && S.user.Role !== 'Staff';
     const over = t => OPEN.includes(t.Status) && t.DueResolve && new Date(t.DueResolve) < Date.now();
     const ago = d => {const m = (Date.now() - new Date(d)) / 6e4; return m < 1 ? 'just now' : m < 60 ? ~~m + 'm ago' : m < 1440 ? ~~(m/60) + 'h ago' : ~~(m/1440) + 'd ago';};
@@ -160,7 +427,11 @@
       return j.data;
     }
 
-    const cache = () => { localStorage.cache = JSON.stringify({user:S.user, tickets:S.tickets, cats:S.cats, slas:S.slas, it:S.it}); };
+    const cache = () => {
+      localStorage.cache = JSON.stringify({
+        user:S.user, tickets:S.tickets, cats:S.cats, slas:S.slas, it:S.it, users:S.users
+      });
+    };
 
     function ensureInputReady(el){
       if (!el) return;
@@ -286,8 +557,8 @@
     function list(){
       const r = filt();
       $('#rows').innerHTML = r.length
-        ? r.map(t => `<div class="row" data-id="${t.TicketID}" tabindex="0"><div class="r1"><span class="id">${t.TicketID}</span><b>${esc(t.Subject)}</b></div><div class="r2">${chip(t.Status)}${chip(t.Priority,'p-'+t.Priority)}${over(t)?'<span class="chip over">Overdue</span>':''}<span class="mu">${isIT()?esc(t.Name)+', ':''}${t.AssignedTo?'assigned to '+esc(t.AssignedTo)+', ':''}${ago(t.Created)}</span></div></div>`).join('')
-        : `<div class="empty">${S.tickets.length ? 'No tickets match these filters.' : 'No tickets yet. Select “New ticket” to report an issue.'}</div>`;
+        ? r.map(t => `<div class="row" data-id="${t.TicketID}" tabindex="0"><div class="r1"><span class="id">${t.TicketID}</span><b>${esc(t.Subject)}</b></div><div class="r2">${chip(t.Status)}${chip(t.Priority,'p-'+t.Priority)}${over(t)?'<span class="chip over">Overdue</span>':''}<span class="mu">${isIT()?esc(t.Name)+(t.Dept?' ('+esc(t.Dept)+')':'')+' • ':''}${t.AssignedTo?'Assigned to '+esc(t.AssignedTo)+' • ':''}${ago(t.Created)}</span></div></div>`).join('')
+        : `<div class="empty">${S.tickets.length ? 'No tickets match these filters.' : 'No tickets yet. Click “+ New ticket” to submit a request.'}</div>`;
     }
 
     $('#rows').onclick = e => { const r = e.target.closest('.row'); if (r) openT(r.dataset.id); };
@@ -323,12 +594,12 @@
       const done = ['Resolved','Closed'].includes(t.Status);
       $('#dr').innerHTML = `<div class="pad"><div class="dh"><div><span class="id">${t.TicketID}</span><h2>${esc(t.Subject)}</h2></div><button class="btn" id="x" type="button">Close</button></div>
       <div class="r2" style="margin:8px 0">${chip(t.Status)}${chip(t.Priority,'p-'+t.Priority)}${over(t)?'<span class="chip over">Overdue</span>':''}</div>
-      <p class="mu" style="margin:0">${esc(t.Name)}, ${esc(t.Email)}${t.Dept?', '+esc(t.Dept):''}<br>${esc(t.Category)}${t.Asset?', asset '+esc(t.Asset):''}<br>Opened ${ago(t.Created)}. Target resolution ${new Date(t.DueResolve).toLocaleString()}</p>
+      <p class="mu" style="margin:0">${esc(t.Name)} (${esc(t.Email)})${t.Dept?' • '+esc(t.Dept):''}<br>${esc(t.Category)}${t.Asset?' • Asset: '+esc(t.Asset):''}<br>Opened ${ago(t.Created)} • Target resolution ${new Date(t.DueResolve).toLocaleString()}</p>
       <div class="desc">${esc(t.Description)}</div>
       ${it ? `<div class="ctl">${sel('Status',0,ST.map(s=>opt(s,t.Status)).join(''))}${sel('Priority',0,PR.map(s=>opt(s,t.Priority)).join(''))}${sel('Assign to',0,opt('',t.AssignedTo,'Unassigned')+S.it.map(n=>opt(n,t.AssignedTo)).join(''))}${sel('Category',0,S.cats.map(s=>opt(s,t.Category)).join(''))}</div>` :
         done ? `<div class="ra" style="justify-content:flex-start;gap:8px">${t.Status==='Resolved'?'<button class="btn p" data-u="Closed" type="button">Confirm it’s fixed</button>':''}<button class="btn" data-u="In Progress" type="button">Reopen</button></div>${t.Rating?`<p class="mu">You rated this ${t.Rating}/5.</p>`:`<p class="mu" style="margin:10px 0 0">How was the support?</p><div class="stars">${[1,2,3,4,5].map(n=>`<button data-r="${n}" aria-label="${n} stars" type="button">★</button>`).join('')}</div>`}` : ''}
-      <h3>Conversation</h3>${S.cm.map(c=>`<div class="cm ${c.Type==='Internal'?'in':''}"><small>${esc(c.Author)}${c.Type==='Internal'?' (internal note)':''}, ${ago(c.Time)}</small>${esc(c.Text)}</div>`).join('')||'<p class="mu">No replies yet.</p>'}
-      <textarea id="rt" placeholder="Write a reply…"></textarea><div class="ra">${it?'<label><input type="checkbox" id="in"> Internal note (staff can’t see it)</label>':'<span></span>'}<button class="btn p" id="sr" type="button">Send reply</button></div></div>`;
+      <h3>Conversation</h3>${S.cm.map(c=>`<div class="cm ${c.Type==='Internal'?'in':''}"><small>${esc(c.Author)}${c.Type==='Internal'?' (internal note)':''} • ${ago(c.Time)}</small>${esc(c.Text)}</div>`).join('')||'<p class="mu">No replies yet.</p>'}
+      <textarea id="rt" placeholder="Write a reply…"></textarea><div class="ra">${it?'<label style="display:flex;align-items:center;gap:6px;font-size:13px"><input type="checkbox" id="in"> Internal note (staff can’t see it)</label>':'<span></span>'}<button class="btn p" id="sr" type="button">Send reply</button></div></div>`;
     }
 
     $('#dr').onclick = async e => {
@@ -369,25 +640,65 @@
     /* new ticket */
     $('#nt').onclick = () => {
       const m = $('#md'); m.classList.remove('hide');
+      const userOpts = (S.users || [])
+        .map(u => `<option value="${esc(u.Email)}">${esc(u.Name)}${u.Dept ? ' – ' + esc(u.Dept) : ''} (${esc(u.Email)})</option>`)
+        .join('');
+
       const reqField = isIT()
-        ? `<label>Requester email (leave blank for yourself)<input id="nr" type="email" placeholder="staff@chamber.lk" autocomplete="off"></label>`
+        ? `<label>Create ticket on behalf of
+            <select id="nrs">
+              <option value="">Myself (${esc(S.user.Name)})</option>
+              ${userOpts}
+              <option value="__custom__">+ Enter another user manually…</option>
+            </select>
+          </label>
+          <div id="custom-req" class="two-col hide">
+            <label>Requester full name<input id="nrn" type="text" placeholder="e.g. Kasun Perera" autocomplete="off"></label>
+            <label>Requester email<input id="nr" type="email" placeholder="kasun@chamber.lk" autocomplete="off"></label>
+          </div>`
         : '';
+
       m.innerHTML = `<div class="mb"><h2>New ticket</h2>
       ${reqField}
       <label>Subject<input id="ns" maxlength="150" placeholder="e.g. Can’t print from Finance printer"></label>
-      <label>Category<select id="nc">${S.cats.map(c=>opt(c,'')).join('')}</select></label>
-      <label>How urgent is it?<select id="np">${opt('Low','Medium','Low: can wait a few days')}${opt('Medium','Medium','Medium: slowing my work')}${opt('High','Medium','High: I can’t do my job')}${opt('Critical','Medium','Critical: affects many people')}</select></label>
+      <div class="two-col">
+        <label>Category<select id="nc">${S.cats.map(c=>opt(c,'')).join('')}</select></label>
+        <label>Urgency<select id="np">${opt('Low','Medium','Low: can wait a few days')}${opt('Medium','Medium','Medium: slowing my work')}${opt('High','Medium','High: I can’t do my job')}${opt('Critical','Medium','Critical: affects many people')}</select></label>
+      </div>
       <label>What’s happening?<textarea id="nd" placeholder="What did you try? Any error message?"></textarea></label>
       <label>Device or asset tag (optional)<input id="na" maxlength="100"></label>
       <div class="ra"><button class="btn" id="nx" type="button">Cancel</button><button class="btn p" id="ny" type="button">Submit ticket</button></div></div>`;
-      (isIT() ? $('#nr') : $('#ns')).focus();
+
+      if (isIT() && $('#nrs')) {
+        $('#nrs').onchange = e => {
+          const isCustom = e.target.value === '__custom__';
+          $('#custom-req').classList.toggle('hide', !isCustom);
+          if (isCustom && $('#nrn')) $('#nrn').focus();
+        };
+        $('#nrs').focus();
+      } else {
+        $('#ns').focus();
+      }
+
       $('#nx').onclick = () => { m.classList.add('hide'); };
       $('#ny').onclick = async e => {
         const b = e.currentTarget; b.disabled = true;
         try {
-          const requester = $('#nr') ? $('#nr').value.trim() : '';
+          let requester = '', requesterName = '';
+          if (isIT() && $('#nrs')) {
+            const selVal = $('#nrs').value;
+            if (selVal === '__custom__') {
+              requester = $('#nr') ? $('#nr').value.trim() : '';
+              requesterName = $('#nrn') ? $('#nrn').value.trim() : '';
+            } else if (selVal) {
+              requester = selVal;
+              const matched = (S.users || []).find(u => u.Email === selVal);
+              requesterName = matched ? matched.Name : '';
+            }
+          }
           const t = await api('create', {
             requester,
+            requesterName,
             subject:$('#ns').value,
             category:$('#nc').value,
             priority:$('#np').value,
