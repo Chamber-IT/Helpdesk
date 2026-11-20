@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IT Help Desk</title>
+<style>
+:root{--bg:#f2f5f7;--cd:#fff;--tx:#12202b;--mu:#62727f;--bd:#dde4ea;--ac:#0f766e;--ac2:#e0f2f0;--er:#c2410c;--er2:#ffedd5;--ok:#15803d;--ok2:#dcfce7;--wa:#a16207;--wa2:#fef3c7;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1519;--cd:#162027;--tx:#e6edf2;--mu:#92a3b0;--bd:#26343e;--ac:#2dd4bf;--ac2:#12332f;--er:#fdba74;--er2:#3a2111;--ok:#86efac;--ok2:#12301d;--wa:#fcd34d;--wa2:#35290c;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+.hide{display:none!important}.mu{color:var(--mu)}h1,h2,h3{margin:0;letter-spacing:-.01em}h2{font-size:19px}h3{font-size:14px;margin:18px 0 8px}
+input,select,textarea,.btn{font:inherit;color:inherit;border:1px solid var(--bd);background:var(--cd);border-radius:8px;padding:8px 11px}
+textarea{width:100%;min-height:90px;resize:vertical}input,select{min-width:0}
+.btn{cursor:pointer;font-weight:600}.btn:hover{border-color:var(--ac)}.btn.p{background:var(--ac);border-color:var(--ac);color:var(--bg)}.btn:disabled{opacity:.5;cursor:wait}
+:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.login{min-height:100vh;display:grid;place-items:center;padding:16px}.lc{width:100%;max-width:380px;display:grid;gap:12px;padding:28px;background:var(--cd);border:1px solid var(--bd);border-radius:14px}.lc input{width:100%}.lc h1{font-size:24px}
+.top{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;padding:10px 18px;background:var(--cd);border-bottom:1px solid var(--bd)}
+.top nav{display:flex;gap:2px;margin-left:14px}.top nav button{border:0;background:none;color:var(--mu);font:inherit;font-weight:600;padding:6px 12px;border-radius:8px;cursor:pointer}.top nav button.on{background:var(--ac2);color:var(--ac)}.sp{flex:1}
+main{max-width:1000px;margin:0 auto;padding:18px}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.bar input{flex:1;min-width:180px}
+.row{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:11px 14px;margin-bottom:8px;cursor:pointer}.row:hover{border-color:var(--ac)}
+.r1{display:flex;gap:10px;align-items:baseline}.r1 b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.id{font-size:12px;color:var(--mu);font-variant-numeric:tabular-nums;white-space:nowrap}
+.r2{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:5px;font-size:12px}
+.chip{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:600;background:var(--bg);border:1px solid var(--bd)}
+.s-New,.s-Assigned{background:var(--ac2);color:var(--ac);border-color:transparent}.s-InProgress{background:var(--wa2);color:var(--wa);border-color:transparent}.s-WaitingonUser{background:var(--er2);color:var(--er);border-color:transparent}.s-Resolved,.s-Closed{background:var(--ok2);color:var(--ok);border-color:transparent}
+.p-Critical,.over{background:var(--er2);color:var(--er);border-color:transparent}.p-High{color:var(--wa)}
+.empty{text-align:center;padding:48px 12px;color:var(--mu)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}.kpi{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:12px 14px}.kpi b{display:block;font-size:26px;line-height:1.2;font-variant-numeric:tabular-nums}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}.panel{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:14px}
+.br{display:grid;grid-template-columns:120px 1fr 30px;gap:8px;align-items:center;margin:6px 0;font-size:13px}.br i{display:block;height:8px;border-radius:4px;background:var(--ac)}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(560px,100%);background:var(--bg);border-left:1px solid var(--bd);overflow:auto;transform:translateX(105%);transition:transform .2s;z-index:10}.drawer.open{transform:none}
+.pad{padding:18px}.dh{display:flex;justify-content:space-between;gap:10px}.desc{white-space:pre-wrap;background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:12px;margin:10px 0}
+.ctl{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ctl label{font-size:12px;color:var(--mu)}.ctl select{width:100%}
+.cm{background:var(--cd);border:1px solid var(--bd);border-radius:10px;padding:9px 12px;margin-bottom:8px;white-space:pre-wrap}.cm.in{background:var(--wa2)}.cm small{display:block;color:var(--mu)}
+.ra{display:flex;justify-content:space-between;align-items:center;margin-top:8px}.stars button{border:0;background:none;font-size:24px;cursor:pointer;color:var(--wa)}
+.modal{position:fixed;inset:0;background:#0008;display:grid;place-items:center;padding:14px;z-index:20}.mb{width:100%;max-width:520px;background:var(--cd);border-radius:14px;padding:20px;display:grid;gap:10px;max-height:94vh;overflow:auto}.mb input,.mb select{width:100%}.mb label{font-size:12px;color:var(--mu);display:grid;gap:3px}
+#toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,80px);background:var(--tx);color:var(--bg);padding:9px 16px;border-radius:99px;transition:transform .2s;z-index:30}#toast.show{transform:translate(-50%,0)}#toast.err{background:var(--er);color:#fff}
+@media(max-width:600px){.top nav{margin-left:0}.top b{display:none}main{padding:12px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body>
+<div id="login" class="login hide"><div class="lc"><h1>IT Help Desk</h1><p class="mu" style="margin:0">Sign in with your work email. We’ll send you a 6-digit code.</p>
+<div id="l1" style="display:grid;gap:10px"><input id="em" type="email" placeholder="you@company.com" autocomplete="email"><button class="btn p" id="send">Send code</button></div>
+<div id="l2" class="hide" style="display:grid;gap:10px"><input id="cd" inputmode="numeric" maxlength="6" placeholder="6-digit code" autocomplete="one-time-code"><button class="btn p" id="go">Sign in</button><a href="#" id="back" class="mu">Use a different email</a></div></div></div>
+<div id="app" class="hide">
+<header class="top"><b>IT Help Desk</b><nav><button data-v="tickets" class="on">Tickets</button><button data-v="dash" id="navd">Dashboard</button></nav><span class="sp"></span><button class="btn p" id="nt">New ticket</button><button class="btn" id="out">Sign out</button></header>
+<main><section id="v-tickets"><div class="bar"><input id="q" placeholder="Search tickets…"><select id="fs"></select><select id="fp"></select><select id="fa" class="hide"></select></div><div id="rows"></div></section><section id="v-dash" class="hide"></section></main></div>
+<aside id="dr" class="drawer"></aside><div id="md" class="modal hide"></div><div id="toast"></div>
+<script>
+const API='PASTE_YOUR_WEB_APP_EXEC_URL_HERE';
+const ST=['New','Assigned','In Progress','Waiting on User','Resolved','Closed'],OPEN=ST.slice(0,4),PR=['Low','Medium','High','Critical'];
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const S={token:localStorage.tok||'',user:null,tickets:[],cats:[],slas:[],it:[],view:'tickets',f:{q:'',st:'open',pr:'',as:''},cur:null,cm:[]};
+const isIT=()=>S.user&&S.user.Role!=='Staff',over=t=>OPEN.includes(t.Status)&&t.DueResolve&&new Date(t.DueResolve)<Date.now();
+const ago=d=>{const m=(Date.now()-new Date(d))/6e4;return m<1?'just now':m<60?~~m+'m ago':m<1440?~~(m/60)+'h ago':~~(m/1440)+'d ago'};
+const chip=(l,c)=>`<span class="chip ${c||'s-'+String(l).replace(/ /g,'')}">${esc(l)}</span>`;
+const opt=(v,cur,l)=>`<option value="${esc(v)}" ${v===cur?'selected':''}>${esc(l??v)}</option>`;
+function toast(m,e){const t=$('#toast');t.textContent=m;t.className='show'+(e?' err':'');clearTimeout(toast.t);toast.t=setTimeout(()=>t.className='',3200)}
+async function api(a,p={}){
+ let j;try{const r=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({a,token:S.token,...p})});j=await r.json()}catch(e){throw new Error('Can’t reach the server. Check your connection.')}
+ if(!j.ok){if(/session expired/i.test(j.error))logout(true);throw new Error(j.error)}return j.data}
+const cache=()=>localStorage.cache=JSON.stringify({user:S.user,tickets:S.tickets,cats:S.cats,slas:S.slas,it:S.it});
+function logout(exp){localStorage.removeItem('tok');localStorage.removeItem('cache');S.token='';S.user=null;closeD();$('#app').classList.add('hide');$('#login').classList.remove('hide');$('#l1').classList.remove('hide');$('#l2').classList.add('hide');if(exp===true)toast('Session expired. Sign in again.',1)}
+/* login */
+$('#send').onclick=async e=>{const b=e.target;b.disabled=true;try{await api('otp',{email:$('#em').value});$('#l1').classList.add('hide');$('#l2').classList.remove('hide');$('#cd').focus();toast('Code sent. Check your email.')}catch(x){toast(x.message,1)}b.disabled=false};
+$('#go').onclick=async e=>{const b=e.target;b.disabled=true;try{const d=await api('login',{email:$('#em').value,code:$('#cd').value});S.token=localStorage.tok=d.token;$('#cd').value='';await boot()}catch(x){toast(x.message,1)}b.disabled=false};
+$('#back').onclick=e=>{e.preventDefault();$('#l2').classList.add('hide');$('#l1').classList.remove('hide')};
+$('#em').onkeydown=e=>e.key==='Enter'&&$('#send').click();$('#cd').onkeydown=e=>e.key==='Enter'&&$('#go').click();
+$('#out').onclick=()=>logout();
+/* boot: paint cached data instantly, refresh in background */
+async function boot(){
+ if(!S.token)return logout();
+ const c=localStorage.cache;if(c){Object.assign(S,JSON.parse(c));show()}
+ try{Object.assign(S,await api('init'));cache();show()}catch(e){if(S.token&&!c)logout();if(S.token)toast(e.message,1)}}
+function show(){
+ $('#login').classList.add('hide');$('#app').classList.remove('hide');$('#navd').classList.toggle('hide',!isIT());$('#fa').classList.toggle('hide',!isIT());
+ const f=S.f;$('#fs').innerHTML=opt('open',f.st,'Open tickets')+opt('all',f.st,'All tickets')+ST.map(s=>opt(s,f.st)).join('');
+ $('#fp').innerHTML=opt('',f.pr,'Any priority')+PR.map(p=>opt(p,f.pr)).join('');
+ $('#fa').innerHTML=opt('',f.as,'Anyone')+opt('_',f.as,'Unassigned')+S.it.map(n=>opt(n,f.as)).join('');
+ view(S.view)}
+function view(v){S.view=v;document.querySelectorAll('.top nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));$('#v-tickets').classList.toggle('hide',v!=='tickets');$('#v-dash').classList.toggle('hide',v!=='dash');v==='dash'?dash():list()}
+document.querySelectorAll('.top nav button').forEach(b=>b.onclick=()=>view(b.dataset.v));
+/* list */
+function filt(){const f=S.f,q=f.q.toLowerCase();return S.tickets.filter(t=>(f.st==='open'?OPEN.includes(t.Status):f.st==='all'||t.Status===f.st)&&(!f.pr||t.Priority===f.pr)&&(!f.as||(f.as==='_'?!t.AssignedTo:t.AssignedTo===f.as))&&(!q||(t.TicketID+t.Subject+t.Name+t.Email+t.Description).toLowerCase().includes(q)))}
+function list(){const r=filt();$('#rows').innerHTML=r.length?r.map(t=>`<div class="row" data-id="${t.TicketID}" tabindex="0"><div class="r1"><span class="id">${t.TicketID}</span><b>${esc(t.Subject)}</b></div><div class="r2">${chip(t.Status)}${chip(t.Priority,'p-'+t.Priority)}${over(t)?'<span class="chip over">Overdue</span>':''}<span class="mu">${isIT()?esc(t.Name)+', ':''}${t.AssignedTo?'assigned to '+esc(t.AssignedTo)+', ':''}${ago(t.Created)}</span></div></div>`).join(''):`<div class="empty">${S.tickets.length?'No tickets match these filters.':'No tickets yet. Select “New ticket” to report an issue.'}</div>`}
+$('#rows').onclick=e=>{const r=e.target.closest('.row');r&&openT(r.dataset.id)};$('#rows').onkeydown=e=>{if(e.key==='Enter'){const r=e.target.closest('.row');r&&openT(r.dataset.id)}};
+$('#q').oninput=e=>{S.f.q=e.target.value;list()};
+[['fs','st'],['fp','pr'],['fa','as']].forEach(([i,k])=>$('#'+i).onchange=e=>{S.f[k]=e.target.value;list()});
+/* dashboard (IT) */
+function dash(){
+ const T=S.tickets,op=T.filter(t=>OPEN.includes(t.Status)),mo=new Date();mo.setDate(1);mo.setHours(0,0,0,0);
+ const rs=T.filter(t=>t.ResolvedAt&&new Date(t.ResolvedAt)>=mo),rt=T.filter(t=>t.Rating),avg=(a,f)=>a.length?a.reduce((s,t)=>s+f(t),0)/a.length:0;
+ const hrs=avg(rs,t=>(new Date(t.ResolvedAt)-new Date(t.Created))/36e5),by=(a,k)=>{const m={};a.forEach(t=>m[t[k]||'—']=(m[t[k]||'—']||0)+1);return Object.entries(m).sort((x,y)=>y[1]-x[1])};
+ const bars=a=>{const mx=Math.max(1,...a.map(x=>x[1]));return a.map(([n,c])=>`<div class="br"><span>${esc(n)}</span><i style="width:${c/mx*100}%"></i><b>${c}</b></div>`).join('')||'<p class="mu">No data</p>'};
+ $('#v-dash').innerHTML=`<div class="kpis"><div class="kpi"><span class="mu">Open</span><b>${op.length}</b></div><div class="kpi"><span class="mu">Unassigned</span><b>${op.filter(t=>!t.AssignedTo).length}</b></div><div class="kpi"><span class="mu">Overdue</span><b>${op.filter(over).length}</b></div><div class="kpi"><span class="mu">Resolved this month</span><b>${rs.length}</b></div><div class="kpi"><span class="mu">Avg. resolution (h)</span><b>${hrs?hrs.toFixed(1):'–'}</b></div><div class="kpi"><span class="mu">Satisfaction (of 5)</span><b>${rt.length?avg(rt,t=>+t.Rating).toFixed(1):'–'}</b></div></div>
+ <div class="cols"><div class="panel"><h3>Open by category</h3>${bars(by(op,'Category'))}</div><div class="panel"><h3>Open by assignee</h3>${bars(by(op.map(t=>({AssignedTo:t.AssignedTo||'Unassigned'})),'AssignedTo'))}</div><div class="panel"><h3>All tickets by status</h3>${bars(by(T,'Status'))}</div><div class="panel"><h3>Tickets by department</h3>${bars(by(T,'Dept'))}</div></div>`}
+/* detail drawer */
+function closeD(){$('#dr').classList.remove('open');S.cur=null}
+async function openT(id){const d=$('#dr');d.classList.add('open');d.innerHTML='<div class="pad mu">Loading…</div>';
+ const t=S.tickets.find(x=>x.TicketID===id);if(t){S.cur=t;S.cm=[];draw()}
+ try{const r=await api('get',{id});S.cur=r.t;S.cm=r.c;draw()}catch(e){toast(e.message,1);closeD()}}
+function draw(){const t=S.cur,it=isIT(),sel=(f,v,a)=>`<div><label>${f}</label><select data-f="${f==='Assign to'?'AssignedTo':f}">${a}</select></div>`;
+ const done=['Resolved','Closed'].includes(t.Status);
+ $('#dr').innerHTML=`<div class="pad"><div class="dh"><div><span class="id">${t.TicketID}</span><h2>${esc(t.Subject)}</h2></div><button class="btn" id="x">Close</button></div>
+ <div class="r2" style="margin:8px 0">${chip(t.Status)}${chip(t.Priority,'p-'+t.Priority)}${over(t)?'<span class="chip over">Overdue</span>':''}</div>
+ <p class="mu" style="margin:0">${esc(t.Name)}, ${esc(t.Email)}${t.Dept?', '+esc(t.Dept):''}<br>${esc(t.Category)}${t.Asset?', asset '+esc(t.Asset):''}<br>Opened ${ago(t.Created)}. Target resolution ${new Date(t.DueResolve).toLocaleString()}</p>
+ <div class="desc">${esc(t.Description)}</div>
+ ${it?`<div class="ctl">${sel('Status',0,ST.map(s=>opt(s,t.Status)).join(''))}${sel('Priority',0,PR.map(s=>opt(s,t.Priority)).join(''))}${sel('Assign to',0,opt('',t.AssignedTo,'Unassigned')+S.it.map(n=>opt(n,t.AssignedTo)).join(''))}${sel('Category',0,S.cats.map(s=>opt(s,t.Category)).join(''))}</div>`:
+ done?`<div class="ra" style="justify-content:flex-start;gap:8px">${t.Status==='Resolved'?'<button class="btn p" data-u="Closed">Confirm it’s fixed</button>':''}<button class="btn" data-u="In Progress">Reopen</button></div>${t.Rating?`<p class="mu">You rated this ${t.Rating}/5.</p>`:`<p class="mu" style="margin:10px 0 0">How was the support?</p><div class="stars">${[1,2,3,4,5].map(n=>`<button data-r="${n}" aria-label="${n} stars">★</button>`).join('')}</div>`}`:''}
+ <h3>Conversation</h3>${S.cm.map(c=>`<div class="cm ${c.Type==='Internal'?'in':''}"><small>${esc(c.Author)}${c.Type==='Internal'?' (internal note)':''}, ${ago(c.Time)}</small>${esc(c.Text)}</div>`).join('')||'<p class="mu">No replies yet.</p>'}
+ <textarea id="rt" placeholder="Write a reply…"></textarea><div class="ra">${it?'<label><input type="checkbox" id="in"> Internal note (staff can’t see it)</label>':'<span></span>'}<button class="btn p" id="sr">Send reply</button></div></div>`}
+$('#dr').onclick=async e=>{const t=S.cur,b=e.target;if(!t)return;
+ if(b.id==='x')return closeD();
+ if(b.id==='sr'){const text=$('#rt').value.trim();if(!text)return toast('Write a reply first',1);b.disabled=true;
+  try{const r=await api('comment',{id:t.TicketID,text,internal:!!($('#in')&&$('#in').checked)});S.cm.push({Author:S.user.Name,Type:$('#in')&&$('#in').checked?'Internal':'Public',Text:text,Time:new Date().toISOString()});merge(r.t);toast('Reply sent')}catch(x){toast(x.message,1);b.disabled=false}return}
+ if(b.dataset.u)return upd({Status:b.dataset.u});
+ if(b.dataset.r){try{merge(await api('rate',{id:t.TicketID,rating:b.dataset.r}));toast('Thanks for the feedback')}catch(x){toast(x.message,1)}}};
+$('#dr').onchange=e=>{const f=e.target.dataset.f;f&&upd({[f]:e.target.value})};
+async function upd(patch){try{merge(await api('update',{id:S.cur.TicketID,patch}));toast('Saved')}catch(x){toast(x.message,1);draw()}}
+function merge(t){const i=S.tickets.findIndex(x=>x.TicketID===t.TicketID);i<0?S.tickets.unshift(t):S.tickets[i]=t;if(S.cur&&S.cur.TicketID===t.TicketID)S.cur=t;cache();S.view==='dash'?dash():list();if(S.cur)draw()}
+/* new ticket */
+$('#nt').onclick=()=>{const m=$('#md');m.classList.remove('hide');m.innerHTML=`<div class="mb"><h2>New ticket</h2>
+ <label>Subject<input id="ns" maxlength="150" placeholder="e.g. Can’t print from Finance printer"></label>
+ <label>Category<select id="nc">${S.cats.map(c=>opt(c,'')).join('')}</select></label>
+ <label>How urgent is it?<select id="np">${opt('Low','Medium','Low: can wait a few days')}${opt('Medium','Medium','Medium: slowing my work')}${opt('High','Medium','High: I can’t do my job')}${opt('Critical','Medium','Critical: affects many people')}</select></label>
+ <label>What’s happening?<textarea id="nd" placeholder="What did you try? Any error message?"></textarea></label>
+ <label>Device or asset tag (optional)<input id="na" maxlength="100"></label>
+ <div class="ra"><button class="btn" id="nx">Cancel</button><button class="btn p" id="ny">Submit ticket</button></div></div>`;$('#ns').focus();
+ $('#nx').onclick=()=>m.classList.add('hide');
+ $('#ny').onclick=async e=>{const b=e.target;b.disabled=true;try{const t=await api('create',{subject:$('#ns').value,category:$('#nc').value,priority:$('#np').value,description:$('#nd').value,asset:$('#na').value});merge(t);m.classList.add('hide');toast('Ticket '+t.TicketID+' submitted')}catch(x){toast(x.message,1);b.disabled=false}}};
+document.onkeydown=e=>{if(e.key==='Escape'){closeD();$('#md').classList.add('hide')}};
+/* background refresh */
+setInterval(async()=>{if(document.hidden||!S.token||!S.user)return;try{const d=await api('init');Object.assign(S,d);cache();S.view==='dash'?dash():list()}catch(e){}},60000);
+boot();
+</script></body></html>
