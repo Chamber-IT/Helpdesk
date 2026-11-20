@@ -369,19 +369,31 @@
     /* new ticket */
     $('#nt').onclick = () => {
       const m = $('#md'); m.classList.remove('hide');
+      const reqField = isIT()
+        ? `<label>Requester email (leave blank for yourself)<input id="nr" type="email" placeholder="staff@chamber.lk" autocomplete="off"></label>`
+        : '';
       m.innerHTML = `<div class="mb"><h2>New ticket</h2>
+      ${reqField}
       <label>Subject<input id="ns" maxlength="150" placeholder="e.g. Can’t print from Finance printer"></label>
       <label>Category<select id="nc">${S.cats.map(c=>opt(c,'')).join('')}</select></label>
       <label>How urgent is it?<select id="np">${opt('Low','Medium','Low: can wait a few days')}${opt('Medium','Medium','Medium: slowing my work')}${opt('High','Medium','High: I can’t do my job')}${opt('Critical','Medium','Critical: affects many people')}</select></label>
       <label>What’s happening?<textarea id="nd" placeholder="What did you try? Any error message?"></textarea></label>
       <label>Device or asset tag (optional)<input id="na" maxlength="100"></label>
       <div class="ra"><button class="btn" id="nx" type="button">Cancel</button><button class="btn p" id="ny" type="button">Submit ticket</button></div></div>`;
-      $('#ns').focus();
+      (isIT() ? $('#nr') : $('#ns')).focus();
       $('#nx').onclick = () => { m.classList.add('hide'); };
       $('#ny').onclick = async e => {
         const b = e.currentTarget; b.disabled = true;
         try {
-          const t = await api('create', {subject:$('#ns').value, category:$('#nc').value, priority:$('#np').value, description:$('#nd').value, asset:$('#na').value});
+          const requester = $('#nr') ? $('#nr').value.trim() : '';
+          const t = await api('create', {
+            requester,
+            subject:$('#ns').value,
+            category:$('#nc').value,
+            priority:$('#np').value,
+            description:$('#nd').value,
+            asset:$('#na').value
+          });
           merge(t); m.classList.add('hide'); toast('Ticket ' + t.TicketID + ' submitted');
         } catch(x) { toast(x.message, 1); b.disabled = false; }
       };
