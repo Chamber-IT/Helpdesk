@@ -1,926 +1,870 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#4a1212">
-<title>Chamber IT Helpdesk System</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%9B%A0%EF%B8%8F%3C/text%3E%3C/svg%3E">
-<style>
-:root{
-  --brand:#6b1919;--dark:#4a1212;--gold:#c89d3c;--ink:#1d1212;--muted:#6f5d5d;--bg:#f4efee;--card:#ffffff;--soft:#fbf7f6;--line:#e8dcda;
-  --ok:#16703a;--okbg:#dcf5e4;--warn:#8a5a00;--warnbg:#fff4d6;--bad:#b3261e;--badbg:#fde4e4;--info:#1a56c4;--infobg:#e8f0fe;
-  --shadow:0 1px 2px rgba(60,20,20,.06),0 6px 20px rgba(60,20,20,.06);--r:14px;
-  font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-}
-[data-theme=dark]{
-  --ink:#f3eaea;--muted:#b9a7a7;--bg:#151011;--card:#211718;--soft:#2a1e1f;--line:#3a2a2b;--brand:#c0504d;--gold:#d8ae4e;
-  --okbg:#14361f;--ok:#6fd496;--warnbg:#3b2d0c;--warn:#f0c869;--badbg:#42191a;--bad:#ff8d86;--infobg:#142544;--info:#8db4ff;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.35);
-}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink)}
-body{min-height:100vh;font-size:14.5px;line-height:1.5;-webkit-text-size-adjust:100%}
-h1,h2,h3{margin:0;line-height:1.25}
-button,input,select,textarea{font:inherit;color:inherit}
-a{color:var(--brand)}
-.hide{display:none!important}
-.muted{color:var(--muted)}
-.small{font-size:12.5px}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.grow{flex:1;min-width:0}
-.sp{height:12px}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Chamber IT Helpdesk System</title>
+  <style>
+    :root{
+      --bg:#f5f0ef;
+      --surface:#ffffff;
+      --surface-2:#fbf7f6;
+      --tx:#1d1212;
+      --mu:#685555;
+      --bd:#e2d3d1;
+      --bd-strong:#cbb3b0;
+      --crimson:#6b1919;
+      --crimson-2:#8c2424;
+      --crimson-deep:#470f0f;
+      --crimson-soft:rgba(107,25,25,.09);
+      --gold:#c89d3c;
+      --gold-soft:rgba(200,157,60,.16);
+      --ok:#15803d;
+      --ok-bg:#dcfce7;
+      --wa:#a16207;
+      --wa-bg:#fef3c7;
+      --er:#b91c1c;
+      --er-bg:#fee2e2;
+      --radius-lg:18px;
+      --radius-md:13px;
+      --radius-sm:10px;
+      --shadow:0 12px 32px rgba(54,14,14,.08);
+      --shadow-sm:0 3px 12px rgba(54,14,14,.05);
+      color-scheme:light;
+    }
+    @media(prefers-color-scheme:dark){
+      :root{
+        --bg:#120b0b;
+        --surface:#1d1313;
+        --surface-2:#261919;
+        --tx:#f7eeee;
+        --mu:#b9a2a2;
+        --bd:#372424;
+        --bd-strong:#4d3333;
+        --crimson:#df6b6b;
+        --crimson-2:#ef8282;
+        --crimson-deep:#2d1111;
+        --crimson-soft:rgba(223,107,107,.14);
+        --gold:#dfb656;
+        --gold-soft:rgba(223,182,86,.14);
+        --ok:#86efac;
+        --ok-bg:#12311d;
+        --wa:#fcd34d;
+        --wa-bg:#382a0b;
+        --er:#fca5a5;
+        --er-bg:#421717;
+        --shadow:0 14px 36px rgba(0,0,0,.45);
+        --shadow-sm:0 4px 14px rgba(0,0,0,.3);
+        color-scheme:dark;
+      }
+    }
 
-/* top progress bar */
-#bar{position:fixed;left:0;top:0;height:3px;width:0;background:var(--gold);z-index:100;transition:width .3s,opacity .3s;opacity:0}
-#bar.on{opacity:1;width:70%}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font:15px/1.55 "Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+      background:
+        radial-gradient(circle at 10% 0%, var(--crimson-soft), transparent 38%),
+        radial-gradient(circle at 92% 12%, var(--gold-soft), transparent 36%),
+        var(--bg);
+      color:var(--tx);
+      min-height:100vh;
+      touch-action:manipulation;
+      -webkit-font-smoothing:antialiased;
+    }
+    .hide{display:none!important}
+    .mu{color:var(--mu)}
+    h1,h2,h3{margin:0;letter-spacing:-.02em}
+    h2{font-size:20px;font-weight:700}
+    h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);margin:22px 0 10px}
 
-/* buttons / inputs */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:var(--card);padding:9px 16px;border-radius:10px;font-weight:600;cursor:pointer;transition:.15s;text-decoration:none;color:var(--ink)}
-.btn:hover{border-color:var(--brand)}
-.btn:disabled{opacity:.55;cursor:not-allowed}
-.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}
-.btn.pri:hover{filter:brightness(1.1)}
-.btn.sm{padding:6px 12px;font-size:13px;border-radius:8px}
-.btn.ghost{background:transparent}
-.btn.dangerous{color:var(--bad)}
-.in,select.in,textarea.in{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none}
-.in:focus{border-color:var(--brand);box-shadow:0 0 0 3px color-mix(in srgb,var(--brand) 20%,transparent)}
-textarea.in{min-height:110px;resize:vertical}
-label.lb{display:block;font-weight:600;font-size:13px;margin:0 0 5px;color:var(--muted)}
-.field{margin-bottom:14px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media(max-width:700px){.grid2,.grid3{grid-template-columns:1fr}}
+    /* Generous, tactile form controls */
+    input,select,textarea,.btn{
+      font:inherit;
+      color:inherit;
+      border:1px solid var(--bd);
+      background:var(--surface);
+      border-radius:var(--radius-sm);
+      padding:11px 14px;
+      min-height:44px;
+      pointer-events:auto;
+      user-select:auto;
+      -webkit-user-select:auto;
+      touch-action:manipulation;
+      transition:border-color .16s,box-shadow .16s,background .16s,transform .12s;
+    }
+    input:hover,select:hover,textarea:hover{border-color:var(--bd-strong)}
+    input:focus,select:focus,textarea:focus{
+      outline:none;
+      border-color:var(--crimson);
+      box-shadow:0 0 0 3px var(--crimson-soft);
+    }
+    textarea{width:100%;min-height:112px;resize:vertical}
+    input,select{min-width:0}
 
-/* cards / pills */
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:18px}
-.pill{display:inline-block;padding:3px 11px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap;background:var(--soft);color:var(--muted)}
-.st-New{background:var(--infobg);color:var(--info)}
-.st-Assigned{background:#efe7fb;color:#6b3fb5}[data-theme=dark] .st-Assigned{background:#2d2144;color:#c2a5f5}
-.st-InProgress{background:var(--warnbg);color:var(--warn)}
-.st-WaitingonUser{background:#ffe9e0;color:#b24100}[data-theme=dark] .st-WaitingonUser{background:#47230f;color:#ffb48a}
-.st-Resolved{background:var(--okbg);color:var(--ok)}
-.st-Closed{background:var(--soft);color:var(--muted);border:1px solid var(--line)}
-.p-Low{background:var(--okbg);color:var(--ok)}.p-Medium{background:var(--infobg);color:var(--info)}
-.p-High{background:var(--warnbg);color:var(--warn)}.p-Critical{background:var(--badbg);color:var(--bad)}
+    .btn{
+      cursor:pointer;
+      font-weight:650;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 18px;
+      min-height:44px;
+      white-space:nowrap;
+      box-shadow:var(--shadow-sm);
+    }
+    .btn:hover{border-color:var(--crimson);background:var(--crimson-soft)}
+    .btn.p{
+      background:linear-gradient(135deg,#781c1c 0%,#4e1010 100%);
+      border-color:#4e1010;
+      color:#fff;
+    }
+    .btn.p:hover{
+      background:linear-gradient(135deg,#8d2323 0%,#5e1414 100%);
+      border-color:#5e1414;
+    }
+    .btn.sm{padding:8px 14px;min-height:38px;font-size:13px}
+    .btn:disabled{opacity:.55;cursor:wait}
+    :focus-visible{outline:2px solid var(--crimson);outline-offset:2px}
 
-/* login */
-#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(160deg,var(--dark),#2a0b0b)}
-.lcard{width:100%;max-width:420px;background:var(--card);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4);border-top:5px solid var(--gold)}
-.lhead{background:var(--dark);padding:22px 26px;display:flex;gap:14px;align-items:center;border-bottom:3px solid var(--gold)}
-.lhead img{height:42px;background:#fff;border-radius:10px;padding:4px}
-.lhead .o{color:var(--gold);font-size:10.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase}
-.lhead .a{color:#fff;font-weight:700;font-size:17px}
-.lbody{padding:26px}
-.lbody h2{font-size:20px;margin-bottom:6px}
-.codein{letter-spacing:10px;text-align:center;font-size:26px;font-weight:800;font-family:Consolas,monospace}
-.lmsg{margin-top:12px;font-size:13px;min-height:18px}
-.lmsg.err{color:var(--bad)}
+    /* Login Experience */
+    .login{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:22px;
+      position:relative;
+      z-index:1;
+    }
+    .lc{
+      width:100%;
+      max-width:440px;
+      display:grid;
+      gap:16px;
+      padding:32px 28px;
+      background:var(--surface);
+      border:1px solid var(--bd);
+      border-top:5px solid #6b1919;
+      border-radius:var(--radius-lg);
+      box-shadow:var(--shadow);
+      position:relative;
+      z-index:2;
+    }
+    .brand-hero{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding-bottom:14px;
+      border-bottom:1px solid var(--bd);
+    }
+    .brand-hero img{
+      height:52px;
+      width:auto;
+      max-width:74px;
+      object-fit:contain;
+      background:#fff;
+      padding:5px;
+      border-radius:10px;
+      border:1px solid var(--bd);
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:11px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--crimson);
+      background:var(--crimson-soft);
+      padding:3px 9px;
+      border-radius:999px;
+      margin-bottom:5px;
+    }
+    .lc h1{font-size:22px;font-weight:800}
+    .lc input{width:100%;padding:12px 14px;font-size:15px}
 
-/* app shell */
-header.top{background:var(--dark);color:#fff;border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:30;padding-top:env(safe-area-inset-top)}
-.top .in-h{max-width:1200px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
-.top img{height:34px;background:#fff;border-radius:8px;padding:3px}
-.top .t1{color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;line-height:1.2}
-.top .t2{font-weight:700;font-size:15.5px;line-height:1.2}
-.top .btn{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff}
-.top .btn:hover{background:rgba(255,255,255,.2)}
-.who{text-align:right;line-height:1.2}.who b{display:block;font-size:13px}.who span{font-size:11.5px;color:#e6c98a}
-@media(max-width:640px){.who,.top .t1{display:none}}
-nav.tabs{background:var(--card);border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
-nav.tabs .in-h{max-width:1200px;margin:0 auto;padding:0 12px;display:flex;gap:4px}
-nav.tabs button{border:0;background:none;padding:13px 14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent}
-nav.tabs button.on{color:var(--brand);border-bottom-color:var(--brand)}
-main{max-width:1200px;margin:0 auto;padding:18px 16px 60px}
+    /* Tech-Forward Chamber Topbar */
+    .top{
+      position:sticky;
+      top:0;
+      z-index:8;
+      display:flex;
+      gap:14px;
+      align-items:center;
+      min-height:68px;
+      padding:10px 24px;
+      background:linear-gradient(125deg,#5e1414 0%,#3d0c0c 100%);
+      color:#fff;
+      border-bottom:3px solid var(--gold);
+      box-shadow:0 6px 24px rgba(36,7,7,.26);
+    }
+    .top-brand{display:flex;align-items:center;gap:12px}
+    .top-brand img{
+      height:40px;
+      width:auto;
+      max-width:56px;
+      object-fit:contain;
+      background:#fff;
+      padding:4px;
+      border-radius:9px;
+    }
+    .top-brand .titles{display:flex;flex-direction:column;gap:1px}
+    .top-brand b{font-size:16px;font-weight:750;letter-spacing:-.015em;line-height:1.2}
+    .top-brand small{font-size:11.5px;color:rgba(255,255,255,.78);line-height:1.2}
 
-/* stats */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow);cursor:pointer;text-align:left}
-.stat .n{font-size:26px;font-weight:800;line-height:1.1}.stat .l{font-size:12.5px;color:var(--muted);font-weight:600}
-.stat.bad .n{color:var(--bad)}.stat.warn .n{color:var(--warn)}.stat.ok .n{color:var(--ok)}
-.stat.static{cursor:default}
+    .top nav{display:flex;gap:8px;margin-left:18px}
+    .top nav button{
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.88);
+      font:inherit;
+      font-size:14px;
+      font-weight:650;
+      padding:9px 18px;
+      min-height:42px;
+      border-radius:10px;
+      cursor:pointer;
+      transition:all .15s;
+    }
+    .top nav button:hover{background:rgba(255,255,255,.18);color:#fff}
+    .top nav button.on{
+      background:#fff;
+      color:#4c1010;
+      border-color:#fff;
+      box-shadow:0 2px 10px rgba(0,0,0,.18);
+    }
+    .top .btn{
+      background:rgba(255,255,255,.1);
+      border-color:rgba(255,255,255,.26);
+      color:#fff;
+      box-shadow:none;
+    }
+    .top .btn:hover{background:rgba(255,255,255,.2);border-color:#fff}
+    .top .btn.p{
+      background:var(--gold);
+      border-color:var(--gold);
+      color:#240e0e;
+      font-weight:750;
+    }
+    .top .btn.p:hover{background:#e6be5f;border-color:#e6be5f}
+    .sp{flex:1}
 
-/* toolbar + list */
-.tools{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:10px;margin-bottom:14px}
-.tools.staff{grid-template-columns:2fr repeat(4,1fr)}
-@media(max-width:900px){.tools,.tools.staff{grid-template-columns:1fr 1fr}.tools .q{grid-column:1/-1}}
-.trow{display:grid;grid-template-columns:1fr auto;gap:6px 14px;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;cursor:pointer;box-shadow:var(--shadow);transition:.12s}
-.trow:hover{border-color:var(--brand);transform:translateY(-1px)}
-.tid{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.3px}
-.tsub{font-weight:700;font-size:15.5px;margin:1px 0 3px;word-break:break-word}
-.tmeta{font-size:12.5px;color:var(--muted)}
-.tright{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px;justify-content:center}
-.due{font-size:12.5px;font-weight:700}.due.late{color:var(--bad)}.due.soon{color:var(--warn)}.due.ok{color:var(--ok)}.due.paused{color:var(--info)}.due.done{color:var(--muted);font-weight:600}
-@media(max-width:640px){.trow{grid-template-columns:1fr}.tright{align-items:flex-start;flex-direction:row;flex-wrap:wrap;text-align:left}}
-.empty{text-align:center;padding:50px 20px;color:var(--muted)}
-.empty b{display:block;font-size:17px;color:var(--ink);margin-bottom:4px}
+    /* Main Container & Filter Bar */
+    main{max-width:1120px;margin:0 auto;padding:24px 22px}
+    .bar{
+      display:grid;
+      grid-template-columns:minmax(220px,1.6fr) repeat(3,minmax(150px,1fr));
+      gap:10px;
+      margin-bottom:18px;
+      background:var(--surface);
+      padding:12px;
+      border-radius:var(--radius-md);
+      border:1px solid var(--bd);
+      box-shadow:var(--shadow-sm);
+    }
 
-/* drawer */
-#ov{position:fixed;inset:0;background:rgba(20,5,5,.55);z-index:60;display:flex;justify-content:flex-end;opacity:0;pointer-events:none;transition:.2s}
-#ov.on{opacity:1;pointer-events:auto}
-#panel{width:100%;max-width:760px;height:100%;background:var(--bg);overflow-y:auto;transform:translateX(30px);transition:.2s;padding:0 0 40px}
-#ov.on #panel{transform:none}
-.dhead{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);padding:14px 18px;z-index:5;display:flex;gap:10px;align-items:flex-start}
-.dbody{padding:16px 18px}
-.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
-.info div b{display:block;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.info div span{font-weight:600;word-break:break-word}
-.track{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin:14px 0 4px}
-.track i{display:block;height:6px;border-radius:6px;background:var(--line)}.track i.on{background:var(--brand)}
-.track small{display:block;text-align:center;font-size:10.5px;color:var(--muted);margin-top:5px}.track small.on{color:var(--brand);font-weight:700}
-.desc{white-space:pre-wrap;word-break:break-word;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:6px}
-.sec{margin-top:20px}.sec>h3{font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:8px}
-.att{display:flex;gap:10px;align-items:center;padding:9px 12px;border:1px solid var(--line);background:var(--card);border-radius:10px;margin-bottom:6px}
-.att .nm{font-weight:600;word-break:break-all}
-.msg{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:11px 14px;margin-bottom:10px}
-.msg.int{background:var(--warnbg);border-color:#e6cf8f}
-.msg.mine{border-left:4px solid var(--brand)}
-.msg .h{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--muted);margin-bottom:4px}
-.msg .h b{color:var(--ink)}
-.msg .t{white-space:pre-wrap;word-break:break-word}
-.banner{padding:12px 14px;border-radius:12px;margin-top:14px;font-weight:600}
-.banner.warn{background:var(--warnbg);color:var(--warn)}.banner.info{background:var(--infobg);color:var(--info)}
-.stars{display:flex;gap:4px}.stars button{border:0;background:none;font-size:30px;cursor:pointer;color:var(--line);padding:0 2px}.stars button.on{color:var(--gold)}
-.fp{border:1.5px dashed var(--line);border-radius:12px;padding:10px 12px;background:var(--soft)}
-.fp.drag{border-color:var(--brand);background:color-mix(in srgb,var(--brand) 8%,transparent)}
-.fpbtn{cursor:pointer;font-weight:700;color:var(--brand)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.chip{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px 6px 4px 12px;font-size:12.5px}
-.chip button{border:0;background:var(--line);border-radius:50%;width:20px;height:20px;cursor:pointer;line-height:1;color:var(--ink)}
+    /* Ticket Cards */
+    .row{
+      background:var(--surface);
+      border:1px solid var(--bd);
+      border-left:4px solid var(--crimson);
+      border-radius:var(--radius-md);
+      padding:16px 18px;
+      margin-bottom:12px;
+      cursor:pointer;
+      box-shadow:var(--shadow-sm);
+      transition:transform .14s,border-color .16s,box-shadow .16s;
+    }
+    .row:hover{
+      border-color:var(--crimson);
+      border-left-width:6px;
+      transform:translateY(-2px);
+      box-shadow:var(--shadow);
+    }
+    .r1{display:flex;gap:12px;align-items:baseline}
+    .r1 b{font-weight:700;font-size:15.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .id{
+      font-size:12px;
+      font-weight:750;
+      color:var(--crimson);
+      background:var(--crimson-soft);
+      padding:2px 8px;
+      border-radius:6px;
+      font-variant-numeric:tabular-nums;
+      white-space:nowrap;
+    }
+    .r2{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:9px;font-size:12.5px}
 
-/* dashboard */
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px}
-.hb{display:grid;grid-template-columns:130px 1fr 34px;gap:10px;align-items:center;margin:7px 0;font-size:13px}
-.hb .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hb .tr{background:var(--soft);border-radius:6px;height:12px;overflow:hidden}.hb .tr i{display:block;height:100%;background:var(--brand);border-radius:6px}
-.cols2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
-@media(max-width:800px){.cols2{grid-template-columns:1fr}}
-table.t{width:100%;border-collapse:collapse;font-size:13px}
-table.t th,table.t td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-table.t th{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.5px}
-.scroll{overflow-x:auto}
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      padding:3px 11px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:650;
+      background:var(--surface-2);
+      border:1px solid var(--bd);
+    }
+    .s-New,.s-Assigned{background:var(--crimson-soft);color:var(--crimson);border-color:transparent}
+    .s-InProgress{background:var(--wa-bg);color:var(--wa);border-color:transparent}
+    .s-WaitingonUser{background:var(--er-bg);color:var(--er);border-color:transparent}
+    .s-Resolved,.s-Closed{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+    .p-Critical,.over{background:var(--er-bg);color:var(--er);border-color:transparent}
+    .p-High{background:var(--wa-bg);color:var(--wa);border-color:transparent}
 
-/* toast */
-#toasts{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:120;display:flex;flex-direction:column;gap:8px;align-items:center;width:min(92vw,420px)}
-.toast{background:#222;color:#fff;padding:11px 18px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.35);font-weight:600;width:100%;text-align:center;animation:in .2s}
-.toast.err{background:var(--bad);color:#fff}.toast.ok{background:var(--ok);color:#fff}
-[data-theme=dark] .toast.ok,[data-theme=dark] .toast.err{color:#111}
-@keyframes in{from{opacity:0;transform:translateY(8px)}}
-.setup{max-width:640px;margin:60px auto;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:16px}
-</style>
+    .empty{
+      text-align:center;
+      padding:56px 18px;
+      color:var(--mu);
+      background:var(--surface);
+      border:1px dashed var(--bd-strong);
+      border-radius:var(--radius-lg);
+    }
+
+    /* Dashboard */
+    .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px}
+    .kpi{
+      background:var(--surface);
+      border:1px solid var(--bd);
+      border-top:4px solid var(--crimson);
+      border-radius:var(--radius-md);
+      padding:16px 18px;
+      box-shadow:var(--shadow-sm);
+    }
+    .kpi b{display:block;font-size:30px;font-weight:800;line-height:1.15;margin-top:6px;font-variant-numeric:tabular-nums;color:var(--crimson)}
+    .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px}
+    .panel{background:var(--surface);border:1px solid var(--bd);border-radius:var(--radius-md);padding:18px;box-shadow:var(--shadow-sm)}
+    .panel h3{margin-top:0}
+    .br{display:grid;grid-template-columns:135px 1fr 34px;gap:10px;align-items:center;margin:9px 0;font-size:13.5px}
+    .br i{display:block;height:10px;border-radius:999px;background:linear-gradient(90deg,#781c1c,var(--gold))}
+
+    /* Detail Drawer */
+    .drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      height:100%;
+      width:min(620px,100%);
+      background:var(--bg);
+      border-left:1px solid var(--bd);
+      box-shadow:-12px 0 36px rgba(0,0,0,.2);
+      overflow:auto;
+      transform:translateX(106%);
+      transition:transform .22s ease;
+      z-index:15;
+    }
+    .drawer.open{transform:none}
+    .pad{padding:24px}
+    .dh{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .desc{white-space:pre-wrap;background:var(--surface);border:1px solid var(--bd);border-radius:var(--radius-md);padding:15px;margin:14px 0;box-shadow:var(--shadow-sm)}
+    .ctl{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:var(--surface);padding:14px;border-radius:var(--radius-md);border:1px solid var(--bd)}
+    .ctl label{font-size:12px;font-weight:700;color:var(--mu);display:block;margin-bottom:5px}
+    .ctl select{width:100%}
+    .cm{background:var(--surface);border:1px solid var(--bd);border-radius:var(--radius-md);padding:12px 15px;margin-bottom:10px;white-space:pre-wrap;box-shadow:var(--shadow-sm)}
+    .cm.in{background:var(--wa-bg);border-color:rgba(161,98,7,.25)}
+    .cm small{display:block;color:var(--mu);margin-bottom:4px;font-weight:650}
+    .ra{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+    .stars button{border:0;background:none;font-size:28px;cursor:pointer;color:var(--gold);padding:2px 5px}
+
+    /* New Ticket Modal */
+    .modal{position:fixed;inset:0;background:rgba(18,7,7,.62);backdrop-filter:blur(3px);display:grid;place-items:center;padding:16px;z-index:25}
+    .mb{
+      width:100%;
+      max-width:580px;
+      background:var(--surface);
+      border:1px solid var(--bd);
+      border-top:5px solid #6b1919;
+      border-radius:var(--radius-lg);
+      padding:24px;
+      display:grid;
+      gap:13px;
+      max-height:94vh;
+      overflow:auto;
+      box-shadow:var(--shadow);
+    }
+    .mb input,.mb select{width:100%}
+    .mb label{font-size:12.5px;font-weight:700;color:var(--mu);display:grid;gap:5px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .req-box{
+      background:var(--surface-2);
+      border:1px solid var(--bd);
+      border-left:3px solid var(--gold);
+      border-radius:var(--radius-sm);
+      padding:12px;
+      display:grid;
+      gap:10px;
+    }
+
+    /* Toast */
+    #toast{
+      position:fixed;
+      bottom:22px;
+      left:50%;
+      transform:translate(-50%,100px);
+      background:#2b0d0d;
+      color:#fff;
+      border:1px solid var(--gold);
+      padding:11px 20px;
+      border-radius:999px;
+      font-weight:650;
+      box-shadow:var(--shadow);
+      transition:transform .2s;
+      z-index:40;
+      pointer-events:none;
+    }
+    #toast.show{transform:translate(-50%,0)}
+    #toast.err{background:var(--er);border-color:#fff;color:#fff}
+
+    .footer-note{text-align:center;font-size:12px;color:var(--mu);margin-top:28px;padding-bottom:14px}
+
+    @media(max-width:820px){
+      .bar{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:640px){
+      .top{padding:10px 14px;gap:8px}
+      .top nav{margin-left:2px;gap:6px}
+      .top nav button{padding:8px 12px;font-size:13px}
+      .top-brand .titles{display:none}
+      main{padding:16px 14px}
+      .bar{grid-template-columns:1fr}
+      .two-col,.ctl{grid-template-columns:1fr}
+    }
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+  </style>
 </head>
 <body>
-<div id="bar"></div>
-
-<!-- ============ LOGIN ============ -->
-<section id="login" class="hide">
-  <div class="lcard">
-    <div class="lhead"><img src="https://www.chamber.lk/wp-content/uploads/2024/09/ccc-logo-lg.jpg" alt=""><div><div class="o">The Ceylon Chamber of Commerce</div><div class="a">Chamber IT Helpdesk System</div></div></div>
-    <div class="lbody">
-      <div id="lg1">
-        <h2>Sign in</h2>
-        <p class="muted" style="margin:0 0 16px">Enter your Chamber email. We will send a one-time code.</p>
-        <div class="field"><label class="lb" for="lg-email">Email</label><input id="lg-email" class="in" type="email" inputmode="email" autocomplete="username" placeholder="name@chamber.lk"></div>
-        <button class="btn pri" id="lg-send" style="width:100%">Send code</button>
-      </div>
-      <div id="lg2" class="hide">
-        <h2>Enter your code</h2>
-        <p class="muted" style="margin:0 0 16px">We sent a 6-digit code to <b id="lg-to"></b>.</p>
-        <div class="field"><input id="lg-code" class="in codein" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="••••••"></div>
-        <button class="btn pri" id="lg-go" style="width:100%">Sign in</button>
-        <div class="row" style="justify-content:space-between;margin-top:12px">
-          <button class="btn sm ghost" id="lg-back">&larr; Change email</button>
-          <button class="btn sm ghost" id="lg-resend" disabled>Resend code</button>
+  <div id="login" class="login hide">
+    <div class="lc">
+      <div class="brand-hero">
+        <img src="https://www.chamber.lk/wp-content/uploads/2024/09/ccc-logo-lg.jpg" alt="The Ceylon Chamber of Commerce">
+        <div>
+          <div class="eyebrow">The Ceylon Chamber of Commerce</div>
+          <h1>Chamber IT Helpdesk System</h1>
         </div>
       </div>
-      <div id="lg-msg" class="lmsg"></div>
+      <p class="mu" style="margin:0">Sign in with your Chamber email address. We’ll send you a 6-digit verification code.</p>
+      <div id="l1" style="display:grid;gap:12px">
+        <input id="em" type="email" inputmode="email" placeholder="you@chamber.lk" autocomplete="email" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <button class="btn p" id="send" type="button">Send verification code</button>
+      </div>
+      <div id="l2" class="hide" style="display:grid;gap:12px">
+        <input id="cd" type="text" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit code" autocomplete="one-time-code">
+        <button class="btn p" id="go" type="button">Sign in to Helpdesk</button>
+        <a href="#" id="back" class="mu" style="font-size:13px">Use a different email</a>
+      </div>
     </div>
   </div>
-</section>
 
-<!-- ============ APP ============ -->
-<div id="app" class="hide">
-  <header class="top"><div class="in-h">
-    <img src="https://www.chamber.lk/wp-content/uploads/2024/09/ccc-logo-lg.jpg" alt="">
-    <div class="grow"><div class="t1">The Ceylon Chamber of Commerce</div><div class="t2">Chamber IT Helpdesk System</div></div>
-    <div class="who"><b id="who-n"></b><span id="who-r"></span></div>
-    <button class="btn sm" data-act="refresh" title="Refresh">&#8635;</button>
-    <button class="btn sm" data-act="theme" title="Dark / light">&#9680;</button>
-    <button class="btn sm" data-act="logout">Sign out</button>
-  </div></header>
-  <nav class="tabs"><div class="in-h" id="tabs"></div></nav>
-  <main id="view"></main>
-</div>
-
-<div id="setup" class="setup hide">
-  <h2>One last step</h2>
-  <p>Open <code>index.html</code>, find <code>const API =</code> near the top of the script and paste your Apps Script web app <b>/exec</b> URL.</p>
-</div>
-
-<div id="ov"><div id="panel" role="dialog" aria-modal="true"></div></div>
-<div id="toasts"></div>
-
-<script>
-'use strict';
-/* ===================================================================
-   CONFIG – paste your Apps Script Web app URL (ends with /exec)
-   =================================================================== */
-const API = 'https://script.google.com/macros/library/d/14TPzQHa0fdoY7ytkBXpJFV7pDepWmkx17lqJZJqSEdjRv3g9F2_w0lS_/2';
-
-const OPEN = ['New', 'Assigned', 'In Progress', 'Waiting on User'];
-const STATUSES = ['New', 'Assigned', 'In Progress', 'Waiting on User', 'Resolved', 'Closed'];
-const PRIOS = ['Low', 'Medium', 'High', 'Critical'];
-const PRANK = { Critical: 0, High: 1, Medium: 2, Low: 3 };
-const FLOW = ['New', 'Assigned', 'In Progress', 'Resolved', 'Closed'];
-
-/* ---------- tiny helpers ---------- */
-const $ = (s, r) => (r || document).querySelector(s);
-const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
-const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const cls = s => String(s || '').replace(/\s+/g, '');
-const DTF = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Colombo', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
-const fmt = iso => { if (!iso) return '—'; const d = new Date(iso); return isNaN(d) ? '—' : DTF.format(d).replace(',', ''); };
-function span(ms) {
-  const m = Math.round(Math.abs(ms) / 60000);
-  if (m < 60) return m + 'm';
-  const h = Math.floor(m / 60);
-  if (h < 48) return h + 'h ' + (m % 60) + 'm';
-  return Math.round(h / 24) + 'd';
-}
-function rel(iso) {
-  const d = new Date(iso); if (isNaN(d)) return '';
-  const ms = Date.now() - d.getTime();
-  return ms < 60000 ? 'just now' : span(ms) + ' ago';
-}
-const fmtSize = n => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
-const pill = (t, c) => `<span class="pill ${c}">${esc(t)}</span>`;
-const stPill = s => pill(s, 'st-' + cls(s));
-const prPill = p => pill(p, 'p-' + cls(p));
-
-/* ---------- state ---------- */
-const S = {
-  token: localStorage.getItem('hd_token') || null,
-  user: null, tickets: [], cats: [], slas: [], itNames: [], users: [], canned: [], limits: null,
-  view: 'tickets', shown: 100, cur: null, busy: 0,
-  f: { q: '', status: 'open', priority: '', cat: '', who: '', sort: 'new', overdue: false },
-  dashDays: 30, deep: null, arch: { q: '', list: [], total: 0 }, auditRows: null, editCanned: null
-};
-const PF = {};   // pending files per picker key
-const isIT = () => S.user && S.user.Role !== 'Staff';
-const isMgr = () => S.user && S.user.Role === 'Manager';
-
-/* ---------- ui feedback ---------- */
-function busy(d) {
-  S.busy = Math.max(0, S.busy + d);
-  $('#bar').classList.toggle('on', S.busy > 0);
-}
-function toast(msg, type) {
-  const t = document.createElement('div');
-  t.className = 'toast ' + (type || '');
-  t.textContent = msg;
-  $('#toasts').appendChild(t);
-  setTimeout(() => t.remove(), type === 'err' ? 5500 : 2800);
-}
-function btnBusy(b, on, label) {
-  if (!b) return;
-  if (on) { b.dataset.old = b.innerHTML; b.disabled = true; if (label) b.textContent = label; }
-  else { b.disabled = false; if (b.dataset.old) b.innerHTML = b.dataset.old; }
-}
-
-/* ---------- API ---------- */
-async function api(a, data, opts) {
-  opts = opts || {};
-  if (/PASTE_DEPLOYMENT_ID/.test(API)) throw new Error('API URL is not set in index.html');
-  if (!opts.quiet) busy(1);
-  try {
-    let res;
-    try {
-      res = await fetch(API, { method: 'POST', body: JSON.stringify(Object.assign({ a: a, token: S.token }, data || {})), redirect: 'follow' });
-    } catch (e) { throw new Error('Network error – please check your connection'); }
-    let j;
-    try { j = await res.json(); } catch (e) { throw new Error('Unexpected response from the server'); }
-    if (!j.ok) {
-      if (/session expired/i.test(j.error || '') && S.token) sessionLost();
-      throw new Error(j.error || 'Request failed');
-    }
-    return j.data;
-  } finally {
-    if (!opts.quiet) busy(-1);
-  }
-}
-
-/* ===================================================================
-   LOGIN
-   =================================================================== */
-let cdTimer = null;
-function showLogin(msg) {
-  closeDrawer();
-  $('#app').classList.add('hide');
-  $('#login').classList.remove('hide');
-  $('#lg1').classList.remove('hide'); $('#lg2').classList.add('hide');
-  $('#lg-email').value = localStorage.getItem('hd_email') || '';
-  lgMsg(msg || '', true);
-  setTimeout(() => $('#lg-email').focus(), 50);
-}
-function lgMsg(t, plain) { const m = $('#lg-msg'); m.textContent = t || ''; m.className = 'lmsg' + (t && !plain ? ' err' : ''); }
-function startCooldown() {
-  let n = 60; const b = $('#lg-resend');
-  clearInterval(cdTimer); b.disabled = true; b.textContent = 'Resend in ' + n + 's';
-  cdTimer = setInterval(() => {
-    n--; if (n <= 0) { clearInterval(cdTimer); b.disabled = false; b.textContent = 'Resend code'; } else b.textContent = 'Resend in ' + n + 's';
-  }, 1000);
-}
-async function sendCode() {
-  const email = $('#lg-email').value.trim().toLowerCase();
-  if (!/^\S+@\S+\.\S+$/.test(email)) return lgMsg('Enter a valid email address');
-  const b = $('#lg-send'); btnBusy(b, true, 'Sending…'); lgMsg('');
-  try {
-    await api('otp', { email: email }, { quiet: true });
-    S.loginEmail = email; localStorage.setItem('hd_email', email);
-    $('#lg-to').textContent = email;
-    $('#lg1').classList.add('hide'); $('#lg2').classList.remove('hide');
-    $('#lg-code').value = ''; $('#lg-code').focus(); startCooldown();
-  } catch (e) { lgMsg(e.message); }
-  btnBusy(b, false);
-}
-async function resend() {
-  const b = $('#lg-resend'); b.disabled = true; lgMsg('');
-  try { await api('otp', { email: S.loginEmail }, { quiet: true }); lgMsg('A new code was sent.', true); startCooldown(); }
-  catch (e) { lgMsg(e.message); b.disabled = false; }
-}
-async function verifyCode() {
-  const code = $('#lg-code').value.trim();
-  if (!/^\d{6}$/.test(code)) return lgMsg('Enter the 6-digit code');
-  const b = $('#lg-go'); btnBusy(b, true, 'Signing in…'); lgMsg('');
-  try {
-    const r = await api('login', { email: S.loginEmail, code: code }, { quiet: true });
-    S.token = r.token; localStorage.setItem('hd_token', r.token);
-    await loadInit(true);
-    enterApp();
-  } catch (e) { lgMsg(e.message); }
-  btnBusy(b, false);
-}
-function sessionLost() {
-  S.token = null; localStorage.removeItem('hd_token');
-  showLogin('Your session expired. Please sign in again.');
-}
-async function logout() {
-  try { await api('logout', {}, { quiet: true }); } catch (e) {}
-  S.token = null; localStorage.removeItem('hd_token');
-  showLogin('You have been signed out.');
-}
-
-/* ===================================================================
-   DATA
-   =================================================================== */
-async function loadInit(silent) {
-  const d = await api('init', {}, { quiet: !!silent });
-  S.user = d.user; S.tickets = d.tickets || []; S.cats = d.cats || []; S.slas = d.slas || [];
-  S.itNames = d.it || []; S.users = d.users || []; S.canned = d.canned || []; S.limits = d.limits;
-}
-function mergeTicket(t) {
-  if (!t) return;
-  const i = S.tickets.findIndex(x => x.TicketID === t.TicketID);
-  if (i >= 0) S.tickets[i] = t; else S.tickets.unshift(t);
-}
-
-function dueInfo(t) {
-  if (!OPEN.includes(t.Status)) return { text: t.Status === 'Resolved' ? 'Resolved ' + rel(t.ResolvedAt) : 'Closed', c: 'done' };
-  if (t.PausedAt) return { text: 'SLA paused – waiting on user', c: 'paused' };
-  const ms = new Date(t.DueResolve).getTime() - Date.now();
-  if (isNaN(ms)) return { text: '', c: 'done' };
-  if (ms < 0) return { text: 'Overdue by ' + span(ms), c: 'late' };
-  return { text: 'Due in ' + span(ms), c: ms < 2 * 3600e3 ? 'soon' : 'ok' };
-}
-const isOverdue = t => OPEN.includes(t.Status) && !t.PausedAt && new Date(t.DueResolve).getTime() < Date.now();
-
-/* ===================================================================
-   SHELL / NAV
-   =================================================================== */
-function enterApp() {
-  $('#login').classList.add('hide');
-  $('#app').classList.remove('hide');
-  $('#who-n').textContent = S.user.Name;
-  $('#who-r').textContent = S.user.Role + (S.user.Dept ? ' · ' + S.user.Dept : '');
-  S.f = { q: '', status: 'open', priority: '', cat: '', who: '', sort: 'new', overdue: false };
-  go('tickets');
-  if (S.deep) { const id = S.deep; S.deep = null; history.replaceState(null, '', location.pathname); openTicket(id); }
-}
-function tabsList() {
-  const t = [['tickets', 'Tickets'], ['new', '+ New ticket']];
-  if (isIT()) t.push(['dash', 'Dashboard'], ['archive', 'Archive']);
-  if (isMgr()) t.push(['canned', 'Canned replies'], ['audit', 'Audit log']);
-  return t;
-}
-function go(v) {
-  S.view = v;
-  $('#tabs').innerHTML = tabsList().map(x => `<button data-act="nav" data-v="${x[0]}" class="${x[0] === v ? 'on' : ''}">${esc(x[1])}</button>`).join('');
-  const R = { tickets: viewTickets, new: viewNew, dash: viewDash, archive: viewArchive, canned: viewCanned, audit: viewAudit }[v];
-  R();
-  window.scrollTo(0, 0);
-}
-
-/* ===================================================================
-   TICKET LIST
-   =================================================================== */
-function viewTickets() {
-  const it = isIT(), L = S.tickets;
-  const open = L.filter(t => OPEN.includes(t.Status));
-  const stats = it ? [
-    ['Open', open.length, '', { status: 'open' }],
-    ['Overdue', L.filter(isOverdue).length, 'bad', { status: 'open', overdue: true }],
-    ['Unassigned', open.filter(t => !t.AssignedTo).length, 'warn', { status: 'open', who: '__none' }],
-    ['Assigned to me', open.filter(t => t.AssignedTo === S.user.Name).length, '', { status: 'open', who: '__me' }],
-    ['Waiting on user', L.filter(t => t.Status === 'Waiting on User').length, '', { status: 'Waiting on User' }]
-  ] : [
-    ['My open tickets', open.length, '', { status: 'open' }],
-    ['Waiting for my reply', L.filter(t => t.Status === 'Waiting on User').length, 'warn', { status: 'Waiting on User' }],
-    ['Resolved / closed', L.filter(t => !OPEN.includes(t.Status)).length, 'ok', { status: 'all' }]
-  ];
-  S._stats = stats;
-  const f = S.f;
-  const opt = (arr, v, first) => (first ? `<option value="">${first}</option>` : '') + arr.map(x => `<option value="${esc(x)}" ${x === v ? 'selected' : ''}>${esc(x)}</option>`).join('');
-  $('#view').innerHTML = `
-    <div class="stats">${stats.map((s, i) => `<button class="stat ${s[2]}" data-act="stat" data-i="${i}"><div class="n">${s[1]}</div><div class="l">${esc(s[0])}</div></button>`).join('')}</div>
-    <div class="tools ${it ? '' : 'staff'}">
-      <input class="in q" id="f-q" placeholder="Search ID, subject, name, asset…" value="${esc(f.q)}">
-      <select class="in" id="f-status"><option value="open" ${f.status === 'open' ? 'selected' : ''}>All open</option><option value="all" ${f.status === 'all' ? 'selected' : ''}>All tickets</option>${STATUSES.map(s => `<option ${f.status === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
-      <select class="in" id="f-priority">${opt(PRIOS, f.priority, 'Any priority')}</select>
-      <select class="in" id="f-cat">${opt(S.cats, f.cat, 'Any category')}</select>
-      ${it ? `<select class="in" id="f-who"><option value="">Anyone</option><option value="__me" ${f.who === '__me' ? 'selected' : ''}>Assigned to me</option><option value="__none" ${f.who === '__none' ? 'selected' : ''}>Unassigned</option>${S.itNames.map(n => `<option ${f.who === n ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select>` : ''}
-      <select class="in" id="f-sort"><option value="new" ${f.sort === 'new' ? 'selected' : ''}>Newest</option><option value="old" ${f.sort === 'old' ? 'selected' : ''}>Oldest</option><option value="upd" ${f.sort === 'upd' ? 'selected' : ''}>Recently updated</option><option value="due" ${f.sort === 'due' ? 'selected' : ''}>Due soonest</option><option value="pri" ${f.sort === 'pri' ? 'selected' : ''}>Priority</option></select>
-    </div>
-    ${f.overdue ? `<div class="row small" style="margin-bottom:10px"><span class="pill p-Critical">Showing overdue only</span><button class="btn sm ghost" data-act="clr-overdue">Clear</button></div>` : ''}
-    <div id="tlist"></div>`;
-  drawList();
-}
-
-function filtered() {
-  const f = S.f; let L = S.tickets.slice();
-  if (f.status === 'open') L = L.filter(t => OPEN.includes(t.Status));
-  else if (f.status !== 'all') L = L.filter(t => t.Status === f.status);
-  if (f.priority) L = L.filter(t => t.Priority === f.priority);
-  if (f.cat) L = L.filter(t => t.Category === f.cat);
-  if (f.overdue) L = L.filter(isOverdue);
-  if (f.who === '__me') L = L.filter(t => t.AssignedTo === S.user.Name);
-  else if (f.who === '__none') L = L.filter(t => !t.AssignedTo);
-  else if (f.who) L = L.filter(t => t.AssignedTo === f.who);
-  const q = f.q.trim().toLowerCase();
-  if (q) L = L.filter(t => [t.TicketID, t.Subject, t.Name, t.Email, t.Asset, t.Category, t.Dept].join(' ').toLowerCase().includes(q));
-  const due = t => new Date(t.DueResolve).getTime() || 9e15;
-  const sorters = {
-    new: (a, b) => a.Created < b.Created ? 1 : -1, old: (a, b) => a.Created > b.Created ? 1 : -1,
-    upd: (a, b) => a.Updated < b.Updated ? 1 : -1, due: (a, b) => due(a) - due(b),
-    pri: (a, b) => (PRANK[a.Priority] - PRANK[b.Priority]) || (a.Created < b.Created ? 1 : -1)
-  };
-  return L.sort(sorters[f.sort] || sorters.new);
-}
-
-function rowHTML(t) {
-  const d = dueInfo(t), it = isIT();
-  return `<div class="trow" data-act="open" data-id="${esc(t.TicketID)}" tabindex="0">
-    <div><div class="tid">${esc(t.TicketID)}</div><div class="tsub">${esc(t.Subject)}</div>
-      <div class="tmeta">${it ? esc(t.Name) + ' · ' : ''}${esc(t.Category)} · ${it ? (t.AssignedTo ? 'Assigned to ' + esc(t.AssignedTo) : 'Unassigned') + ' · ' : ''}updated ${esc(rel(t.Updated))}${+t.Files > 0 ? ' · 📎 ' + (+t.Files) : ''}</div></div>
-    <div class="tright"><div class="row" style="gap:6px;justify-content:flex-end">${prPill(t.Priority)}${stPill(t.Status)}</div><div class="due ${d.c}">${esc(d.text)}</div></div>
-  </div>`;
-}
-
-function drawList() {
-  const box = $('#tlist'); if (!box) return;
-  const L = filtered();
-  if (!L.length) {
-    box.innerHTML = `<div class="empty"><b>No tickets found</b>${S.tickets.length ? 'Try changing the filters.' : 'Create your first ticket from the “New ticket” tab.'}</div>`;
-    return;
-  }
-  const part = L.slice(0, S.shown);
-  box.innerHTML = part.map(rowHTML).join('') + (L.length > part.length ? `<div style="text-align:center"><button class="btn" data-act="more">Show more (${L.length - part.length} left)</button></div>` : '');
-}
-
-/* ===================================================================
-   FILE PICKER
-   =================================================================== */
-function pickerHTML(key) {
-  const L = S.limits || { maxFiles: 3, maxFileMB: 5, maxTotalMB: 8 };
-  return `<div class="fp" data-fp="${key}"><label class="fpbtn">📎 Attach files<input type="file" multiple hidden data-fpin="${key}"></label>
-    <span class="muted small"> &nbsp;or drag &amp; drop / paste a screenshot · max ${L.maxFiles} files, ${L.maxFileMB} MB each</span><div class="chips" id="chips-${key}"></div></div>`;
-}
-function addFiles(key, list) {
-  const L = S.limits || { maxFiles: 3, maxFileMB: 5, maxTotalMB: 8, ext: [] };
-  const cur = PF[key] = PF[key] || [];
-  for (const f of Array.from(list)) {
-    const ext = (f.name.indexOf('.') >= 0 ? f.name.split('.').pop() : '').toLowerCase();
-    if (!(L.ext || []).includes(ext)) { toast('".' + ext + '" files are not allowed', 'err'); continue; }
-    if (f.size > L.maxFileMB * 1048576) { toast(f.name + ' is larger than ' + L.maxFileMB + ' MB', 'err'); continue; }
-    if (cur.length >= L.maxFiles) { toast('Maximum ' + L.maxFiles + ' files', 'err'); break; }
-    if (cur.reduce((a, x) => a + x.size, 0) + f.size > L.maxTotalMB * 1048576) { toast('Total size must be under ' + L.maxTotalMB + ' MB', 'err'); break; }
-    cur.push(f);
-  }
-  drawChips(key);
-}
-function drawChips(key) {
-  const c = $('#chips-' + key); if (!c) return;
-  c.innerHTML = (PF[key] || []).map((f, i) => `<span class="chip">${esc(f.name)} <span class="muted">${fmtSize(f.size)}</span><button type="button" data-act="rmfile" data-key="${key}" data-i="${i}" aria-label="Remove">×</button></span>`).join('');
-}
-const readFile = f => new Promise((res, rej) => {
-  const r = new FileReader();
-  r.onload = () => res({ name: f.name, data: r.result });
-  r.onerror = () => rej(new Error('Could not read ' + f.name));
-  r.readAsDataURL(f);
-});
-const readFiles = list => Promise.all((list || []).map(readFile));
-
-/* ===================================================================
-   NEW TICKET
-   =================================================================== */
-function viewNew() {
-  PF.nt = [];
-  const it = isIT();
-  const sla = p => { const r = S.slas.find(x => x.Priority === p); return r ? ' – target ' + r.ResolveHrs + 'h' : ''; };
-  $('#view').innerHTML = `<div class="card" style="max-width:820px;margin:0 auto">
-    <h2 style="margin-bottom:4px">New ticket</h2><p class="muted" style="margin:0 0 16px">Describe the problem. The more detail you give, the faster we can fix it.</p>
-    <form id="nt" autocomplete="off">
-      ${it ? `<div class="grid2"><div class="field"><label class="lb">Log on behalf of (email, optional)</label><input class="in" id="nt-req" list="ulist" placeholder="staff@chamber.lk"><datalist id="ulist">${S.users.map(u => `<option value="${esc(u.Email)}">${esc(u.Name)}</option>`).join('')}</datalist></div>
-      <div class="field"><label class="lb">Requester name (optional)</label><input class="in" id="nt-rname" maxlength="100"></div></div>` : ''}
-      <div class="field"><label class="lb">Subject *</label><input class="in" id="nt-sub" maxlength="150" required placeholder="e.g. Laptop cannot connect to Wi-Fi"></div>
-      <div class="grid3">
-        <div class="field"><label class="lb">Category</label><select class="in" id="nt-cat">${S.cats.map(c => `<option>${esc(c)}</option>`).join('')}</select></div>
-        <div class="field"><label class="lb">Priority</label><select class="in" id="nt-pri">${PRIOS.map(p => `<option value="${p}" ${p === 'Medium' ? 'selected' : ''}>${p}${sla(p)}</option>`).join('')}</select></div>
-        <div class="field"><label class="lb">Asset / device (optional)</label><input class="in" id="nt-asset" maxlength="100" placeholder="e.g. Laptop CCC-0123"></div>
-      </div>
-      <div class="field"><label class="lb">Description *</label><textarea class="in" id="nt-desc" maxlength="4000" required data-fpkey="nt" placeholder="What happened? When did it start? Any error message?"></textarea></div>
-      <div class="field">${pickerHTML('nt')}</div>
-      <div class="row"><button class="btn pri" id="nt-go" type="submit">Submit ticket</button><button class="btn ghost" type="button" data-act="nav" data-v="tickets">Cancel</button></div>
-    </form></div>`;
-}
-async function submitTicket(ev) {
-  ev.preventDefault();
-  const sub = $('#nt-sub').value.trim(), desc = $('#nt-desc').value.trim();
-  if (!sub || !desc) return toast('Subject and description are required', 'err');
-  const b = $('#nt-go'); btnBusy(b, true, PF.nt && PF.nt.length ? 'Uploading…' : 'Submitting…');
-  try {
-    const files = await readFiles(PF.nt);
-    const t = await api('create', {
-      subject: sub, description: desc, category: $('#nt-cat').value, priority: $('#nt-pri').value, asset: $('#nt-asset').value.trim(), files: files,
-      requester: isIT() ? $('#nt-req').value.trim() : '', requesterName: isIT() ? $('#nt-rname').value.trim() : ''
-    });
-    PF.nt = []; mergeTicket(t);
-    toast('Ticket ' + t.TicketID + ' created', 'ok');
-    go('tickets'); openTicket(t.TicketID);
-  } catch (e) { toast(e.message, 'err'); btnBusy(b, false); }
-}
-
-/* ===================================================================
-   TICKET DRAWER
-   =================================================================== */
-function closeDrawer() { $('#ov').classList.remove('on'); S.cur = null; }
-async function openTicket(id) {
-  const p = $('#panel');
-  p.innerHTML = `<div class="dhead"><div class="grow"><div class="tid">${esc(id)}</div><div class="muted">Loading…</div></div><button class="btn sm" data-act="close">✕</button></div>`;
-  $('#ov').classList.add('on');
-  PF.reply = [];
-  try {
-    S.cur = await api('get', { id: id });
-    mergeTicket(S.cur.t);
-    renderDetail();
-  } catch (e) { toast(e.message, 'err'); closeDrawer(); }
-}
-async function refreshCur(keepFiles) {
-  if (!S.cur) return;
-  if (!keepFiles) PF.reply = [];
-  S.cur = await api('get', { id: S.cur.t.TicketID }, { quiet: true });
-  mergeTicket(S.cur.t);
-  renderDetail();
-  if (S.view === 'tickets' && $('#tlist')) viewTickets();
-}
-
-function renderDetail() {
-  const { t, c, a } = S.cur, it = isIT(), d = dueInfo(t);
-  const pos = t.Status === 'Waiting on User' ? 2 : Math.max(0, FLOW.indexOf(t.Status));
-  const staffReopen = !it && (t.Status === 'Resolved' || t.Status === 'Closed');
-  const sel = (id, arr0, v, blank) => { const arr = v && !arr0.includes(v) ? [v].concat(arr0) : arr0; return `<select class="in" id="${id}">${blank ? `<option value="">${blank}</option>` : ''}${arr.map(x => `<option ${x === v ? 'selected' : ''}>${esc(x)}</option>`).join('')}</select>`; };
-  const info = [
-    ['Requester', esc(t.Name) + (it ? '<br><span class="muted small">' + esc(t.Email) + '</span>' : '')],
-    ['Department', esc(t.Dept || '—')], ['Category', esc(t.Category)], ['Asset', esc(t.Asset || '—')],
-    ['Assigned to', esc(t.AssignedTo || 'Not assigned yet')], ['Created', fmt(t.Created)],
-    ['Target resolution', esc(fmt(t.DueResolve)) + `<br><span class="due ${d.c}">${esc(d.text)}</span>`],
-    ['First response', t.FirstResponse ? fmt(t.FirstResponse) : '—']
-  ];
-  const canned = S.canned.filter(x => !x.Category || x.Category === t.Category);
-  const stars = [1, 2, 3, 4, 5].map(n => `<button data-act="rate" data-n="${n}" class="${+t.Rating >= n ? 'on' : ''}" aria-label="${n} stars">★</button>`).join('');
-  $('#panel').innerHTML = `
-    <div class="dhead"><div class="grow"><div class="row" style="gap:8px"><span class="tid">${esc(t.TicketID)}</span>${stPill(t.Status)}${prPill(t.Priority)}</div>
-      <h2 style="font-size:19px;margin-top:4px;word-break:break-word">${esc(t.Subject)}</h2></div>
-      <button class="btn sm" data-act="close" aria-label="Close">✕</button></div>
-    <div class="dbody">
-      <div class="track">${FLOW.map((s, i) => `<i class="${i <= pos ? 'on' : ''}"></i>`).join('')}</div>
-      <div class="track" style="margin:0 0 14px">${FLOW.map((s, i) => `<small class="${i === pos ? 'on' : ''}">${s}</small>`).join('')}</div>
-      ${!it && t.Status === 'Waiting on User' ? `<div class="banner warn">IT is waiting for your reply. Please respond below – the resolution timer is paused until you do.</div>` : ''}
-      ${t.PausedAt && it ? `<div class="banner info">SLA clock is paused while waiting on the user.</div>` : ''}
-      <div class="sec" style="margin-top:12px"><div class="info">${info.map(x => `<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('')}</div></div>
-      <div class="sec"><h3>Description</h3><div class="desc">${esc(t.Description)}</div></div>
-      ${a && a.length ? `<div class="sec"><h3>Attachments</h3>${a.map(f => `<div class="att"><div class="grow"><div class="nm">📎 ${esc(f.Name)}${f.Type === 'Internal' ? ' <span class="pill p-High">Internal</span>' : ''}</div><div class="muted small">${fmtSize(+f.Size)} · ${esc(f.Uploader)} · ${esc(fmt(f.Time))}</div></div>
-        ${/^(image\/|application\/pdf|text\/)/.test(f.Mime) ? `<button class="btn sm" data-act="file" data-mode="open" data-fid="${esc(f.Id)}">Open</button>` : ''}<button class="btn sm" data-act="file" data-mode="dl" data-fid="${esc(f.Id)}">Download</button></div>`).join('')}</div>` : ''}
-      ${it ? `<div class="sec card"><h3 style="margin-top:0">Manage ticket</h3>
-        <div class="grid2">
-          <div class="field"><label class="lb">Status</label>${sel('it-Status', STATUSES, t.Status)}</div>
-          <div class="field"><label class="lb">Priority</label>${sel('it-Priority', PRIOS, t.Priority)}</div>
-          <div class="field"><label class="lb">Category</label>${sel('it-Category', S.cats, t.Category)}</div>
-          <div class="field"><label class="lb">Assigned to</label>${sel('it-AssignedTo', S.itNames, t.AssignedTo || '', 'Unassigned')}</div>
+  <div id="app" class="hide">
+    <header class="top">
+      <div class="top-brand">
+        <img src="https://www.chamber.lk/wp-content/uploads/2024/09/ccc-logo-lg.jpg" alt="The Ceylon Chamber of Commerce">
+        <div class="titles">
+          <b>Chamber IT Helpdesk System</b>
+          <small>The Ceylon Chamber of Commerce</small>
         </div>
-        <div class="row"><button class="btn pri" data-act="saveit">Save changes</button>
-          ${t.AssignedTo !== S.user.Name ? `<button class="btn" data-act="quick" data-k="me">Assign to me</button>` : ''}
-          ${OPEN.includes(t.Status) ? `<button class="btn" data-act="quick" data-k="resolve">Mark resolved</button>` : ''}</div></div>` : ''}
-      ${staffReopen ? `<div class="sec card"><h3 style="margin-top:0">Is the problem fixed?</h3>
-        <div class="row"><span class="muted">Rate this support:</span><div class="stars">${stars}</div></div><div class="sp"></div>
-        <div class="row">${t.Status === 'Resolved' ? `<button class="btn" data-act="staffst" data-s="Closed">Yes – close ticket</button>` : ''}<button class="btn dangerous" data-act="staffst" data-s="In Progress">No – reopen</button></div></div>` : ''}
-      <div class="sec"><h3>Conversation</h3>
-        ${c && c.length ? c.map(m => `<div class="msg ${m.Type === 'Internal' ? 'int' : ''} ${m.Author === S.user.Name ? 'mine' : ''}"><div class="h"><span><b>${esc(m.Author)}</b>${m.Type === 'Internal' ? ' · 🔒 Internal note' : ''}</span><span>${esc(fmt(m.Time))}</span></div><div class="t">${esc(m.Text)}</div></div>`).join('') : '<div class="muted">No replies yet.</div>'}
       </div>
-      <div class="sec card"><h3 style="margin-top:0">Reply</h3>
-        ${staffReopen ? '<div class="muted small" style="margin-bottom:8px">Replying will reopen this ticket.</div>' : ''}
-        ${it && canned.length ? `<div class="field"><select class="in" id="canned"><option value="">Insert a canned reply…</option>${canned.map(x => `<option value="${x.id}">${esc(x.Title)}</option>`).join('')}</select></div>` : ''}
-        <div class="field"><textarea class="in" id="rtext" maxlength="4000" data-fpkey="reply" placeholder="${it ? 'Write a reply or an internal note…' : 'Write your reply…'}"></textarea></div>
-        <div class="field">${pickerHTML('reply')}</div>
-        <div class="row">${it ? '<label class="row small" style="gap:6px"><input type="checkbox" id="rint"> Internal note (not visible to the requester)</label>' : ''}<span class="grow"></span><button class="btn pri" data-act="send">Send</button></div>
+      <nav>
+        <button data-v="tickets" class="on" type="button">Tickets</button>
+        <button data-v="dash" id="navd" type="button">Dashboard</button>
+      </nav>
+      <span class="sp"></span>
+      <button class="btn p" id="nt" type="button">+ New ticket</button>
+      <button class="btn" id="out" type="button">Sign out</button>
+    </header>
+
+    <main>
+      <section id="v-tickets">
+        <div class="bar">
+          <input id="q" type="search" placeholder="Search ticket ID, subject, requester…">
+          <select id="fs"></select>
+          <select id="fp"></select>
+          <select id="fa" class="hide"></select>
+        </div>
+        <div id="rows"></div>
+      </section>
+      <section id="v-dash" class="hide"></section>
+      <div class="footer-note">Chamber IT Helpdesk System • The Ceylon Chamber of Commerce</div>
+    </main>
+  </div>
+
+  <aside id="dr" class="drawer"></aside>
+  <div id="md" class="modal hide"></div>
+  <div id="toast"></div>
+
+  <script>
+    const API = 'https://script.google.com/macros/s/AKfycbx_vV_wa2ymwDRaZgt8uwcyMuXKZODYdQeWbqmh8sYjgqKowje3_Z3rwFP-J8zMDeTX3w/exec';
+    const ST = ['New','Assigned','In Progress','Waiting on User','Resolved','Closed'], OPEN = ST.slice(0,4), PR = ['Low','Medium','High','Critical'];
+    const $ = s => document.querySelector(s);
+    const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+    const S = {token:localStorage.tok||'',user:null,tickets:[],cats:[],slas:[],it:[],users:[],view:'tickets',f:{q:'',st:'open',pr:'',as:''},cur:null,cm:[]};
+    const isIT = () => S.user && S.user.Role !== 'Staff';
+    const over = t => OPEN.includes(t.Status) && t.DueResolve && new Date(t.DueResolve) < Date.now();
+    const ago = d => {const m = (Date.now() - new Date(d)) / 6e4; return m < 1 ? 'just now' : m < 60 ? ~~m + 'm ago' : m < 1440 ? ~~(m/60) + 'h ago' : ~~(m/1440) + 'd ago';};
+    const chip = (l,c) => `<span class="chip ${c || 's-' + String(l).replace(/ /g,'')}">${esc(l)}</span>`;
+    const opt = (v,cur,l) => `<option value="${esc(v)}" ${v===cur ? 'selected' : ''}>${esc(l ?? v)}</option>`;
+
+    function toast(m,e){
+      const t = $('#toast');
+      t.textContent = m;
+      t.className = 'show' + (e ? ' err' : '');
+      clearTimeout(toast.t);
+      toast.t = setTimeout(() => { t.className = ''; }, 3200);
+    }
+
+    async function api(a,p={}){
+      let j;
+      try {
+        const r = await fetch(API, {method:'POST', headers:{'Content-Type':'text/plain'}, body:JSON.stringify({a, token:S.token, ...p})});
+        j = await r.json();
+      } catch(e) {
+        throw new Error('Can’t reach the server. Check your connection.');
+      }
+      if (!j.ok) {
+        if (/session expired/i.test(j.error)) logout(true);
+        throw new Error(j.error);
+      }
+      return j.data;
+    }
+
+    const cache = () => {
+      localStorage.cache = JSON.stringify({
+        user:S.user, tickets:S.tickets, cats:S.cats, slas:S.slas, it:S.it, users:S.users
+      });
+    };
+
+    function ensureInputReady(el){
+      if (!el) return;
+      el.disabled = false;
+      el.readOnly = false;
+      el.style.pointerEvents = 'auto';
+      el.style.userSelect = 'auto';
+      el.style.webkitUserSelect = 'auto';
+    }
+
+    function logout(exp){
+      localStorage.removeItem('tok');
+      localStorage.removeItem('cache');
+      S.token = '';
+      S.user = null;
+      S.users = [];
+      closeD();
+      $('#app').classList.add('hide');
+      $('#login').classList.remove('hide');
+      $('#l1').classList.remove('hide');
+      $('#l2').classList.add('hide');
+      ensureInputReady($('#em'));
+      ensureInputReady($('#cd'));
+      if (exp === true) toast('Session expired. Sign in again.', 1);
+    }
+
+    /* login */
+    ['click','pointerdown','touchstart'].forEach(ev => {
+      $('#em').addEventListener(ev, () => {
+        ensureInputReady($('#em'));
+        if (document.activeElement !== $('#em')) $('#em').focus({preventScroll:true});
+      }, {passive:true});
+    });
+
+    $('#send').onclick = async e => {
+      const b = e.currentTarget;
+      b.disabled = true;
+      try {
+        await api('otp', {email:$('#em').value});
+        $('#l1').classList.add('hide');
+        $('#l2').classList.remove('hide');
+        ensureInputReady($('#cd'));
+        $('#cd').focus();
+        toast('Code sent. Check your email.');
+      } catch(x) {
+        toast(x.message, 1);
+      }
+      b.disabled = false;
+    };
+
+    $('#go').onclick = async e => {
+      const b = e.currentTarget;
+      b.disabled = true;
+      try {
+        const d = await api('login', {email:$('#em').value, code:$('#cd').value});
+        S.token = localStorage.tok = d.token;
+        $('#cd').value = '';
+        await boot();
+      } catch(x) {
+        toast(x.message, 1);
+      }
+      b.disabled = false;
+    };
+
+    $('#back').onclick = e => {
+      e.preventDefault();
+      $('#l2').classList.add('hide');
+      $('#l1').classList.remove('hide');
+      ensureInputReady($('#em'));
+      $('#em').focus();
+    };
+
+    $('#em').onkeydown = e => { if (e.key === 'Enter') $('#send').click(); };
+    $('#cd').onkeydown = e => { if (e.key === 'Enter') $('#go').click(); };
+    $('#out').onclick = () => logout();
+
+    /* boot: paint cached data instantly, refresh in background */
+    async function boot(){
+      if (!S.token) return logout();
+      const c = localStorage.cache;
+      if (c) { Object.assign(S, JSON.parse(c)); show(); }
+      try {
+        Object.assign(S, await api('init'));
+        cache();
+        show();
+      } catch(e) {
+        if (S.token && !c) logout();
+        if (S.token) toast(e.message, 1);
+      }
+    }
+
+    function show(){
+      $('#login').classList.add('hide');
+      $('#app').classList.remove('hide');
+      $('#navd').classList.toggle('hide', !isIT());
+      $('#fa').classList.toggle('hide', !isIT());
+      const f = S.f;
+      $('#fs').innerHTML = opt('open', f.st, 'Open tickets') + opt('all', f.st, 'All tickets') + ST.map(s => opt(s, f.st)).join('');
+      $('#fp').innerHTML = opt('', f.pr, 'Any priority') + PR.map(p => opt(p, f.pr)).join('');
+      $('#fa').innerHTML = opt('', f.as, 'Anyone') + opt('_', f.as, 'Unassigned') + S.it.map(n => opt(n, f.as)).join('');
+      view(S.view);
+    }
+
+    function view(v){
+      S.view = v;
+      document.querySelectorAll('.top nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+      $('#v-tickets').classList.toggle('hide', v !== 'tickets');
+      $('#v-dash').classList.toggle('hide', v !== 'dash');
+      v === 'dash' ? dash() : list();
+    }
+    document.querySelectorAll('.top nav button').forEach(b => { b.onclick = () => view(b.dataset.v); });
+
+    /* list */
+    function filt(){
+      const f = S.f, q = f.q.toLowerCase();
+      return S.tickets.filter(t =>
+        (f.st === 'open' ? OPEN.includes(t.Status) : f.st === 'all' || t.Status === f.st) &&
+        (!f.pr || t.Priority === f.pr) &&
+        (!f.as || (f.as === '_' ? !t.AssignedTo : t.AssignedTo === f.as)) &&
+        (!q || (t.TicketID + t.Subject + t.Name + t.Email + t.Description).toLowerCase().includes(q))
+      );
+    }
+
+    function list(){
+      const r = filt();
+      $('#rows').innerHTML = r.length
+        ? r.map(t => `<div class="row" data-id="${t.TicketID}" tabindex="0"><div class="r1"><span class="id">${t.TicketID}</span><b>${esc(t.Subject)}</b></div><div class="r2">${chip(t.Status)}${chip(t.Priority,'p-'+t.Priority)}${over(t)?'<span class="chip over">Overdue</span>':''}<span class="mu">${isIT()?esc(t.Name)+(t.Dept?' ('+esc(t.Dept)+')':'')+' • ':''}${t.AssignedTo?'Assigned to '+esc(t.AssignedTo)+' • ':''}${ago(t.Created)}</span></div></div>`).join('')
+        : `<div class="empty">${S.tickets.length ? 'No tickets match these filters.' : 'No tickets yet. Click “+ New ticket” to submit a request.'}</div>`;
+    }
+
+    $('#rows').onclick = e => { const r = e.target.closest('.row'); if (r) openT(r.dataset.id); };
+    $('#rows').onkeydown = e => { if (e.key === 'Enter') { const r = e.target.closest('.row'); if (r) openT(r.dataset.id); } };
+    $('#q').oninput = e => { S.f.q = e.target.value; list(); };
+    [['fs','st'],['fp','pr'],['fa','as']].forEach(([i,k]) => { $('#'+i).onchange = e => { S.f[k] = e.target.value; list(); }; });
+
+    /* dashboard (IT) */
+    function dash(){
+      const T = S.tickets, op = T.filter(t => OPEN.includes(t.Status)), mo = new Date();
+      mo.setDate(1); mo.setHours(0,0,0,0);
+      const rs = T.filter(t => t.ResolvedAt && new Date(t.ResolvedAt) >= mo), rt = T.filter(t => t.Rating);
+      const avg = (a,f) => a.length ? a.reduce((s,t) => s + f(t), 0) / a.length : 0;
+      const hrs = avg(rs, t => (new Date(t.ResolvedAt) - new Date(t.Created)) / 36e5);
+      const by = (a,k) => { const m = {}; a.forEach(t => { m[t[k]||'—'] = (m[t[k]||'—']||0) + 1; }); return Object.entries(m).sort((x,y) => y[1] - x[1]); };
+      const bars = a => { const mx = Math.max(1, ...a.map(x => x[1])); return a.map(([n,c]) => `<div class="br"><span>${esc(n)}</span><i style="width:${c/mx*100}%"></i><b>${c}</b></div>`).join('') || '<p class="mu">No data</p>'; };
+      $('#v-dash').innerHTML = `<div class="kpis"><div class="kpi"><span class="mu">Open</span><b>${op.length}</b></div><div class="kpi"><span class="mu">Unassigned</span><b>${op.filter(t=>!t.AssignedTo).length}</b></div><div class="kpi"><span class="mu">Overdue</span><b>${op.filter(over).length}</b></div><div class="kpi"><span class="mu">Resolved this month</span><b>${rs.length}</b></div><div class="kpi"><span class="mu">Avg. resolution (h)</span><b>${hrs?hrs.toFixed(1):'–'}</b></div><div class="kpi"><span class="mu">Satisfaction (of 5)</span><b>${rt.length?avg(rt,t=>+t.Rating).toFixed(1):'–'}</b></div></div>
+      <div class="cols"><div class="panel"><h3>Open by category</h3>${bars(by(op,'Category'))}</div><div class="panel"><h3>Open by assignee</h3>${bars(by(op.map(t=>({AssignedTo:t.AssignedTo||'Unassigned'})),'AssignedTo'))}</div><div class="panel"><h3>All tickets by status</h3>${bars(by(T,'Status'))}</div><div class="panel"><h3>Tickets by department</h3>${bars(by(T,'Dept'))}</div></div>`;
+    }
+
+    /* detail drawer */
+    function closeD(){ $('#dr').classList.remove('open'); S.cur = null; }
+    async function openT(id){
+      const d = $('#dr'); d.classList.add('open'); d.innerHTML = '<div class="pad mu">Loading…</div>';
+      const t = S.tickets.find(x => x.TicketID === id); if (t) { S.cur = t; S.cm = []; draw(); }
+      try { const r = await api('get', {id}); S.cur = r.t; S.cm = r.c; draw(); }
+      catch(e) { toast(e.message, 1); closeD(); }
+    }
+
+    function draw(){
+      const t = S.cur, it = isIT();
+      const sel = (f,v,a) => `<div><label>${f}</label><select data-f="${f==='Assign to'?'AssignedTo':f}">${a}</select></div>`;
+      const done = ['Resolved','Closed'].includes(t.Status);
+      $('#dr').innerHTML = `<div class="pad"><div class="dh"><div><span class="id">${t.TicketID}</span><h2 style="margin-top:6px">${esc(t.Subject)}</h2></div><button class="btn sm" id="x" type="button">Close</button></div>
+      <div class="r2" style="margin:10px 0">${chip(t.Status)}${chip(t.Priority,'p-'+t.Priority)}${over(t)?'<span class="chip over">Overdue</span>':''}</div>
+      <p class="mu" style="margin:0">${esc(t.Name)} (${esc(t.Email)})${t.Dept?' • '+esc(t.Dept):''}<br>${esc(t.Category)}${t.Asset?' • Asset: '+esc(t.Asset):''}<br>Opened ${ago(t.Created)} • Target resolution ${new Date(t.DueResolve).toLocaleString()}</p>
+      <div class="desc">${esc(t.Description)}</div>
+      ${it ? `<div class="ctl">${sel('Status',0,ST.map(s=>opt(s,t.Status)).join(''))}${sel('Priority',0,PR.map(s=>opt(s,t.Priority)).join(''))}${sel('Assign to',0,opt('',t.AssignedTo,'Unassigned')+S.it.map(n=>opt(n,t.AssignedTo)).join(''))}${sel('Category',0,S.cats.map(s=>opt(s,t.Category)).join(''))}</div>` :
+        done ? `<div class="ra" style="justify-content:flex-start;gap:8px">${t.Status==='Resolved'?'<button class="btn p sm" data-u="Closed" type="button">Confirm it’s fixed</button>':''}<button class="btn sm" data-u="In Progress" type="button">Reopen</button></div>${t.Rating?`<p class="mu">You rated this ${t.Rating}/5.</p>`:`<p class="mu" style="margin:10px 0 0">How was the support?</p><div class="stars">${[1,2,3,4,5].map(n=>`<button data-r="${n}" aria-label="${n} stars" type="button">★</button>`).join('')}</div>`}` : ''}
+      <h3>Conversation</h3>${S.cm.map(c=>`<div class="cm ${c.Type==='Internal'?'in':''}"><small>${esc(c.Author)}${c.Type==='Internal'?' (internal note)':''} • ${ago(c.Time)}</small>${esc(c.Text)}</div>`).join('')||'<p class="mu">No replies yet.</p>'}
+      <textarea id="rt" placeholder="Write a reply…"></textarea><div class="ra">${it?'<label style="display:flex;align-items:center;gap:6px;font-size:13px"><input type="checkbox" id="in"> Internal note (staff can’t see it)</label>':'<span></span>'}<button class="btn p" id="sr" type="button">Send reply</button></div></div>`;
+    }
+
+    $('#dr').onclick = async e => {
+      const t = S.cur, b = e.target; if (!t) return;
+      if (b.id === 'x') return closeD();
+      if (b.id === 'sr') {
+        const text = $('#rt').value.trim(); if (!text) return toast('Write a reply first', 1); b.disabled = true;
+        try {
+          const r = await api('comment', {id:t.TicketID, text, internal:!!($('#in') && $('#in').checked)});
+          S.cm.push({Author:S.user.Name, Type:$('#in')&&$('#in').checked?'Internal':'Public', Text:text, Time:new Date().toISOString()});
+          merge(r.t); toast('Reply sent');
+        } catch(x) { toast(x.message, 1); b.disabled = false; }
+        return;
+      }
+      if (b.dataset.u) return upd({Status:b.dataset.u});
+      if (b.dataset.r) {
+        try { merge(await api('rate', {id:t.TicketID, rating:b.dataset.r})); toast('Thanks for the feedback'); }
+        catch(x) { toast(x.message, 1); }
+      }
+    };
+
+    $('#dr').onchange = e => { const f = e.target.dataset.f; if (f) upd({[f]:e.target.value}); };
+
+    async function upd(patch){
+      try { merge(await api('update', {id:S.cur.TicketID, patch})); toast('Saved'); }
+      catch(x) { toast(x.message, 1); draw(); }
+    }
+
+    function merge(t){
+      const i = S.tickets.findIndex(x => x.TicketID === t.TicketID);
+      if (i < 0) S.tickets.unshift(t); else S.tickets[i] = t;
+      if (S.cur && S.cur.TicketID === t.TicketID) S.cur = t;
+      cache();
+      S.view === 'dash' ? dash() : list();
+      if (S.cur) draw();
+    }
+
+    /* Build requester options from Users sheet + fallback from existing tickets */
+    function getRequesterList(){
+      const map = new Map();
+      (S.users || []).forEach(u => {
+        const em = String(u.Email || '').trim().toLowerCase();
+        if (!em) return;
+        map.set(em, {
+          Email: em,
+          Name: String(u.Name || em.split('@')[0]).trim(),
+          Dept: String(u.Dept || '').trim()
+        });
+      });
+      if (!map.size) {
+        (S.tickets || []).forEach(t => {
+          const em = String(t.Email || '').trim().toLowerCase();
+          if (em && !map.has(em)) {
+            map.set(em, {
+              Email: em,
+              Name: String(t.Name || em.split('@')[0]).trim(),
+              Dept: String(t.Dept || '').trim()
+            });
+          }
+        });
+      }
+      return Array.from(map.values()).sort((a, b) => a.Name.localeCompare(b.Name));
+    }
+
+    function renderRequesterOptions(selectedEmail = ''){
+      const sel = $('#nrs');
+      if (!sel) return;
+      const list = getRequesterList();
+      const opts = list
+        .map(u => `<option value="${esc(u.Email)}" ${u.Email === selectedEmail ? 'selected' : ''}>${esc(u.Name)}${u.Dept ? ' • ' + esc(u.Dept) : ''} (${esc(u.Email)})</option>`)
+        .join('');
+      sel.innerHTML = `<option value="">Myself (${esc(S.user ? S.user.Name : 'Current User')})</option>${opts}<option value="__custom__">+ Enter another user manually…</option>`;
+    }
+
+    /* new ticket */
+    $('#nt').onclick = async () => {
+      const m = $('#md'); m.classList.remove('hide');
+      const reqBlock = isIT()
+        ? `<div class="req-box">
+            <label>Create ticket on behalf of
+              <select id="nrs"></select>
+            </label>
+            <div id="custom-req" class="two-col hide">
+              <label>Requester full name<input id="nrn" type="text" placeholder="e.g. Kasun Perera" autocomplete="off"></label>
+              <label>Requester email<input id="nr" type="email" placeholder="kasun@chamber.lk" autocomplete="off"></label>
+            </div>
+          </div>`
+        : '';
+
+      m.innerHTML = `<div class="mb"><h2>Create New Ticket</h2>
+      ${reqBlock}
+      <label>Subject<input id="ns" maxlength="150" placeholder="e.g. Cannot print from Finance printer"></label>
+      <div class="two-col">
+        <label>Category<select id="nc">${S.cats.map(c=>opt(c,'')).join('')}</select></label>
+        <label>Urgency<select id="np">${opt('Low','Medium','Low: can wait a few days')}${opt('Medium','Medium','Medium: slowing my work')}${opt('High','Medium','High: cannot do my job')}${opt('Critical','Medium','Critical: affects many people')}</select></label>
       </div>
-    </div>`;
-  drawChips('reply');
-}
+      <label>What’s happening?<textarea id="nd" placeholder="Describe the issue, steps already tried, or any error message…"></textarea></label>
+      <label>Device or asset tag (optional)<input id="na" maxlength="100" placeholder="e.g. CCC-LAP-042"></label>
+      <div class="ra"><button class="btn" id="nx" type="button">Cancel</button><button class="btn p" id="ny" type="button">Submit ticket</button></div></div>`;
 
-async function sendReply(b) {
-  const t = S.cur.t, text = $('#rtext').value.trim(), files = PF.reply || [];
-  if (!text && !files.length) return toast('Write a reply first', 'err');
-  btnBusy(b, true, files.length ? 'Uploading…' : 'Sending…');
-  try {
-    const payload = { id: t.TicketID, text: text, internal: isIT() && $('#rint') && $('#rint').checked, files: await readFiles(files) };
-    await api('comment', payload);
-    await refreshCur();
-    toast('Reply sent', 'ok');
-  } catch (e) { toast(e.message, 'err'); btnBusy(b, false); }
-}
-async function patchTicket(patch, okMsg, b) {
-  btnBusy(b, true, 'Saving…');
-  try {
-    await api('update', { id: S.cur.t.TicketID, patch: patch });
-    await refreshCur(true);
-    toast(okMsg || 'Ticket updated', 'ok');
-  } catch (e) { toast(e.message, 'err'); btnBusy(b, false); }
-}
-function saveIT(b) {
-  const t = S.cur.t, patch = {};
-  ['Status', 'Priority', 'Category', 'AssignedTo'].forEach(k => { const v = $('#it-' + k).value; if (v !== String(t[k] || '')) patch[k] = v; });
-  if (!Object.keys(patch).length) return toast('No changes to save');
-  patchTicket(patch, 'Ticket updated', b);
-}
-async function rateTicket(n) {
-  try {
-    const r = await api('rate', { id: S.cur.t.TicketID, rating: n });
-    S.cur.t = r.t; mergeTicket(r.t); renderDetail(); toast('Thank you for your feedback!', 'ok');
-  } catch (e) { toast(e.message, 'err'); }
-}
-async function openFile(fid, mode) {
-  const w = mode === 'open' ? window.open('', '_blank') : null;
-  try {
-    const f = await api('file', { id: S.cur.t.TicketID, fileId: fid });
-    const bin = atob(f.data), u8 = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
-    const url = URL.createObjectURL(new Blob([u8], { type: f.mime }));
-    if (w) { w.location = url; }
-    else { const a = document.createElement('a'); a.href = url; a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); }
-    setTimeout(() => URL.revokeObjectURL(url), 60000);
-  } catch (e) { if (w) w.close(); toast(e.message, 'err'); }
-}
-function insertCanned(id) {
-  const c = S.canned.find(x => String(x.id) === String(id)); if (!c) return;
-  const t = S.cur.t, first = String(t.Name || '').split(' ')[0] || t.Name;
-  const txt = c.Text.replace(/\{name\}/g, first).replace(/\{ticket\}/g, t.TicketID).replace(/\{agent\}/g, S.user.Name);
-  const ta = $('#rtext'); ta.value = ta.value ? ta.value + '\n\n' + txt : txt; ta.focus();
-}
+      if (isIT() && $('#nrs')) {
+        renderRequesterOptions('');
+        $('#nrs').onchange = e => {
+          const isCustom = e.target.value === '__custom__';
+          $('#custom-req').classList.toggle('hide', !isCustom);
+          if (isCustom && $('#nrn')) $('#nrn').focus();
+        };
+        $('#nrs').focus();
 
-/* ===================================================================
-   DASHBOARD (IT)
-   =================================================================== */
-async function viewDash() {
-  $('#view').innerHTML = `<div class="row" style="margin-bottom:14px"><h2 class="grow">Dashboard</h2>
-    <select class="in" id="d-days" style="width:auto">${[[7, 'Last 7 days'], [30, 'Last 30 days'], [90, 'Last 90 days'], [365, 'Last 12 months']].map(x => `<option value="${x[0]}" ${S.dashDays === x[0] ? 'selected' : ''}>${x[1]}</option>`).join('')}</select>
-    <button class="btn" data-act="dash-refresh">Refresh</button></div><div id="dash"><div class="empty">Loading…</div></div>`;
-  try {
-    const d = await api('dash', { days: S.dashDays });
-    if (S.view !== 'dash') return;
-    $('#dash').innerHTML = dashHTML(d);
-  } catch (e) { $('#dash').innerHTML = `<div class="empty"><b>Could not load</b>${esc(e.message)}</div>`; }
-}
-function hbars(list, empty) {
-  if (!list.length) return `<div class="muted">${empty || 'No data'}</div>`;
-  const max = Math.max.apply(null, list.map(x => x.count)) || 1;
-  return list.map(x => `<div class="hb"><span class="nm" title="${esc(x.name)}">${esc(x.name)}</span><span class="tr"><i style="width:${Math.max(3, Math.round(100 * x.count / max))}%"></i></span><b>${x.count}</b></div>`).join('');
-}
-function trendSVG(tr) {
-  const n = tr.labels.length, W = 640, H = 210, L = 30, B = 24, T = 10;
-  const max = Math.max(1, ...tr.created, ...tr.resolved);
-  const step = (W - L) / n, bw = Math.max(2, Math.min(14, step / 2 - 1));
-  const y = v => T + (H - T - B) * (1 - v / max);
-  let g = '';
-  for (let i = 0; i <= 4; i++) {
-    const v = Math.round(max * i / 4), yy = y(v);
-    g += `<line x1="${L}" x2="${W}" y1="${yy}" y2="${yy}" stroke="var(--line)"/><text x="${L - 5}" y="${yy + 4}" text-anchor="end" font-size="10" fill="var(--muted)">${v}</text>`;
-  }
-  const every = Math.ceil(n / 10);
-  tr.labels.forEach((lb, i) => {
-    const x = L + i * step + step / 2;
-    const a = tr.created[i], r = tr.resolved[i];
-    g += `<rect x="${x - bw - 0.5}" y="${y(a)}" width="${bw}" height="${H - B - y(a)}" rx="2" fill="var(--brand)"><title>${esc(lb)} created: ${a}</title></rect>`;
-    g += `<rect x="${x + 0.5}" y="${y(r)}" width="${bw}" height="${H - B - y(r)}" rx="2" fill="var(--gold)"><title>${esc(lb)} resolved: ${r}</title></rect>`;
-    if (i % every === 0) g += `<text x="${x}" y="${H - 8}" text-anchor="middle" font-size="10" fill="var(--muted)">${esc(lb)}</text>`;
-  });
-  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Tickets created and resolved per day">${g}</svg>
-    <div class="row small" style="gap:16px"><span><b style="color:var(--brand)">■</b> Created</span><span><b style="color:var(--gold)">■</b> Resolved</span></div>`;
-}
-function dashHTML(d) {
-  const k = (n, l, c) => `<div class="stat static ${c || ''}"><div class="n">${n}</div><div class="l">${l}</div></div>`;
-  const h = v => v == null ? '—' : v + 'h';
-  const obj2 = o => Object.keys(o).map(n => ({ name: n, count: o[n] })).sort((a, b) => b.count - a.count);
-  const rd = d.rating.dist.map((c, i) => ({ name: (i + 1) + ' ★', count: c })).reverse();
-  return `<div class="kpis">
-    ${k(d.open, 'Open now')}${k(d.overdue, 'Overdue', d.overdue ? 'bad' : '')}${k(d.waiting, 'Waiting on user')}${k(d.unassigned, 'Unassigned', d.unassigned ? 'warn' : '')}
-    ${k(d.created, 'Created (period)')}${k(d.resolved, 'Resolved (period)', 'ok')}
-    ${k(d.slaPct == null ? '—' : d.slaPct + '%', 'Resolved within SLA', d.slaPct != null && d.slaPct < 80 ? 'bad' : 'ok')}
-    ${k(h(d.avgFirstResponseHrs), 'Avg first response')}${k(h(d.avgResolveHrs), 'Avg time to resolve')}
-    ${k(d.rating.avg == null ? '—' : d.rating.avg + ' ★', 'Satisfaction (' + d.rating.count + ' ratings)')}</div>
-    <div class="card"><h3 style="margin-bottom:8px">Tickets per day${d.days > 30 ? ' (last 30 days)' : ''}</h3>${trendSVG(d.trend)}</div>
-    <div class="cols2"><div class="card"><h3>By category</h3>${hbars(d.byCategory)}</div><div class="card"><h3>By department</h3>${hbars(d.byDept)}</div></div>
-    <div class="cols2"><div class="card"><h3>Open by status</h3>${hbars(obj2(d.byStatus), 'No open tickets')}<div class="sp"></div><h3>Created by priority</h3>${hbars(obj2(d.byPriority))}</div>
-      <div class="card"><h3>Satisfaction</h3>${hbars(rd, 'No ratings yet')}<div class="sp"></div><h3>Top requesters</h3>${hbars(d.topRequesters)}</div></div>
-    <div class="card" style="margin-top:16px"><h3 style="margin-bottom:8px">Technician workload</h3><div class="scroll"><table class="t"><tr><th>Technician</th><th>Open</th><th>Resolved (period)</th></tr>
-      ${d.techs.sort((a, b) => b.open - a.open).map(x => `<tr><td>${esc(x.name)}</td><td>${x.open}</td><td>${x.resolved}</td></tr>`).join('') || '<tr><td colspan="3" class="muted">No data</td></tr>'}</table></div></div>
-    <p class="muted small" style="margin-top:12px">Updated ${esc(fmt(d.generated))} · refreshes automatically every 2 minutes.</p>`;
-}
+        /* Refresh latest Users sheet entries in the background */
+        api('init').then(d => {
+          Object.assign(S, d);
+          cache();
+          const curVal = $('#nrs') ? $('#nrs').value : '';
+          if (curVal !== '__custom__') renderRequesterOptions(curVal);
+        }).catch(() => {});
+      } else {
+        $('#ns').focus();
+      }
 
-/* ===================================================================
-   ARCHIVE (IT)
-   =================================================================== */
-function viewArchive() {
-  const A = S.arch;
-  $('#view').innerHTML = `<h2 style="margin-bottom:6px">Archive</h2><p class="muted" style="margin:0 0 14px">Older closed tickets (the Tickets tab shows open tickets and the last 90 days).</p>
-    <div class="row" style="margin-bottom:14px"><input class="in grow" id="a-q" placeholder="Search ID, subject, requester, category…" value="${esc(A.q)}"><button class="btn pri" data-act="arch-search">Search</button></div><div id="alist"></div>`;
-  drawArch();
-  if (!A.loaded) archLoad(true);
-}
-function drawArch() {
-  const A = S.arch, box = $('#alist'); if (!box) return;
-  if (!A.list.length) { box.innerHTML = `<div class="empty"><b>${A.loaded ? 'No archived tickets found' : 'Loading…'}</b></div>`; return; }
-  box.innerHTML = A.list.map(rowHTML).join('') + (A.list.length < A.total ? `<div style="text-align:center"><button class="btn" data-act="arch-more">Load more (${A.total - A.list.length} left)</button></div>` : '');
-}
-async function archLoad(reset) {
-  const A = S.arch;
-  try {
-    const r = await api('archive', { q: A.q, skip: reset ? 0 : A.list.length });
-    A.list = reset ? r.tickets : A.list.concat(r.tickets); A.total = r.total; A.loaded = true;
-    drawArch();
-  } catch (e) { toast(e.message, 'err'); }
-}
+      $('#nx').onclick = () => { m.classList.add('hide'); };
+      $('#ny').onclick = async e => {
+        const b = e.currentTarget; b.disabled = true;
+        try {
+          let requester = '', requesterName = '';
+          if (isIT() && $('#nrs')) {
+            const selVal = $('#nrs').value;
+            if (selVal === '__custom__') {
+              requester = $('#nr') ? $('#nr').value.trim() : '';
+              requesterName = $('#nrn') ? $('#nrn').value.trim() : '';
+            } else if (selVal) {
+              requester = selVal;
+              const matched = getRequesterList().find(u => u.Email === selVal);
+              requesterName = matched ? matched.Name : '';
+            }
+          }
+          const t = await api('create', {
+            requester,
+            requesterName,
+            subject:$('#ns').value,
+            category:$('#nc').value,
+            priority:$('#np').value,
+            description:$('#nd').value,
+            asset:$('#na').value
+          });
+          merge(t); m.classList.add('hide'); toast('Ticket ' + t.TicketID + ' submitted');
+        } catch(x) { toast(x.message, 1); b.disabled = false; }
+      };
+    };
 
-/* ===================================================================
-   CANNED REPLIES (Manager)
-   =================================================================== */
-function viewCanned() {
-  const e = S.editCanned && S.canned.find(x => x.id === S.editCanned);
-  $('#view').innerHTML = `<h2 style="margin-bottom:6px">Canned replies</h2><p class="muted" style="margin:0 0 14px">Ready-made answers IT can insert into a reply. Use <code>{name}</code>, <code>{ticket}</code> and <code>{agent}</code> as placeholders.</p>
-  <div class="cols2" style="margin-top:0"><div>${S.canned.length ? S.canned.map(c => `<div class="card" style="margin-bottom:10px"><div class="row"><b class="grow">${esc(c.Title)}</b>${c.Category ? pill(c.Category, '') : ''}<button class="btn sm" data-act="canned-edit" data-id="${c.id}">Edit</button><button class="btn sm dangerous" data-act="canned-del" data-id="${c.id}">Remove</button></div><div class="muted small" style="white-space:pre-wrap;margin-top:6px">${esc(c.Text)}</div></div>`).join('') : '<div class="empty"><b>No canned replies yet</b></div>'}</div>
-  <div class="card" style="align-self:start"><h3 style="margin-bottom:10px">${e ? 'Edit reply' : 'Add a reply'}</h3>
-    <div class="field"><label class="lb">Title</label><input class="in" id="c-title" maxlength="80" value="${esc(e ? e.Title : '')}"></div>
-    <div class="field"><label class="lb">Category (optional – only shown for this category)</label><select class="in" id="c-cat"><option value="">All categories</option>${S.cats.map(c => `<option ${e && e.Category === c ? 'selected' : ''}>${esc(c)}</option>`).join('')}</select></div>
-    <div class="field"><label class="lb">Text</label><textarea class="in" id="c-text" maxlength="2000">${esc(e ? e.Text : '')}</textarea></div>
-    <div class="row"><button class="btn pri" data-act="canned-save">${e ? 'Save changes' : 'Add reply'}</button>${e ? '<button class="btn ghost" data-act="canned-cancel">Cancel</button>' : ''}</div></div></div>`;
-}
-async function saveCanned(b) {
-  const title = $('#c-title').value.trim(), text = $('#c-text').value.trim();
-  if (!title || !text) return toast('Title and text are required', 'err');
-  btnBusy(b, true, 'Saving…');
-  try {
-    await api('canned_save', { row: S.editCanned || undefined, title: title, text: text, category: $('#c-cat').value });
-    S.editCanned = null; await loadInit(true); viewCanned(); toast('Saved', 'ok');
-  } catch (e) { toast(e.message, 'err'); btnBusy(b, false); }
-}
+    document.onkeydown = e => {
+      if (e.key === 'Escape') { closeD(); $('#md').classList.add('hide'); }
+    };
 
-/* ===================================================================
-   AUDIT LOG (Manager)
-   =================================================================== */
-function viewAudit() {
-  $('#view').innerHTML = `<h2 style="margin-bottom:6px">Audit log</h2><p class="muted" style="margin:0 0 14px">Who did what, and when. Newest first.</p>
-    <div class="row" style="margin-bottom:14px"><input class="in" id="au-id" style="max-width:220px" placeholder="Ticket ID (optional)"><select class="in" id="au-n" style="width:auto"><option>100</option><option selected>200</option><option>500</option></select><button class="btn pri" data-act="audit-load">Load</button></div>
-    <div id="aulist"><div class="empty">Loading…</div></div>`;
-  loadAudit();
-}
-async function loadAudit() {
-  try {
-    const id = $('#au-id').value.trim(), limit = +$('#au-n').value;
-    const rows = await api('audit', { id: id || undefined, limit: limit });
-    if (S.view !== 'audit') return;
-    $('#aulist').innerHTML = rows.length ? `<div class="card scroll" style="padding:6px"><table class="t"><tr><th>Time</th><th>Who</th><th>Action</th><th>Ticket</th><th>Change</th><th>Details</th></tr>
-      ${rows.map(r => `<tr><td style="white-space:nowrap">${esc(fmt(r.Time))}</td><td>${esc(r.Actor)}<div class="muted small">${esc(r.Role)}</div></td><td><b>${esc(r.Action)}</b></td>
-      <td>${r.TicketID ? `<a href="#" data-act="open" data-id="${esc(r.TicketID)}">${esc(r.TicketID)}</a>` : ''}</td>
-      <td>${r.Field ? esc(r.Field) + ': ' : ''}${r.Old !== '' ? esc(r.Old) + ' → ' : ''}${esc(r.New)}</td><td class="muted">${esc(r.Details)}</td></tr>`).join('')}</table></div>` : '<div class="empty"><b>No entries</b></div>';
-  } catch (e) { $('#aulist').innerHTML = `<div class="empty"><b>Could not load</b>${esc(e.message)}</div>`; }
-}
+    /* background refresh */
+    setInterval(async () => {
+      if (document.hidden || !S.token || !S.user) return;
+      try { const d = await api('init'); Object.assign(S, d); cache(); S.view === 'dash' ? dash() : list(); }
+      catch(e) {}
+    }, 60000);
 
-/* ===================================================================
-   EVENTS (delegated)
-   =================================================================== */
-document.addEventListener('click', ev => {
-  const el = ev.target.closest('[data-act]');
-  if (!el) { if (ev.target.id === 'ov') closeDrawer(); return; }
-  const act = el.dataset.act;
-  if (el.tagName === 'A') ev.preventDefault();
-  switch (act) {
-    case 'nav': closeDrawer(); go(el.dataset.v); break;
-    case 'open': openTicket(el.dataset.id); break;
-    case 'close': closeDrawer(); break;
-    case 'more': S.shown += 100; drawList(); break;
-    case 'stat': { const s = S._stats[+el.dataset.i][3]; S.f = Object.assign({ q: '', status: 'open', priority: '', cat: '', who: '', sort: S.f.sort, overdue: false }, s); S.shown = 100; viewTickets(); break; }
-    case 'clr-overdue': S.f.overdue = false; viewTickets(); break;
-    case 'refresh': loadInit().then(() => { go(S.view); toast('Refreshed', 'ok'); }).catch(e => toast(e.message, 'err')); break;
-    case 'theme': { const d = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = d; localStorage.setItem('hd_theme', d); break; }
-    case 'logout': logout(); break;
-    case 'send': sendReply(el); break;
-    case 'saveit': saveIT(el); break;
-    case 'quick': patchTicket(el.dataset.k === 'me' ? { AssignedTo: S.user.Name } : { Status: 'Resolved' }, el.dataset.k === 'me' ? 'Assigned to you' : 'Marked as resolved', el); break;
-    case 'staffst': patchTicket({ Status: el.dataset.s }, el.dataset.s === 'Closed' ? 'Ticket closed' : 'Ticket reopened', el); break;
-    case 'rate': rateTicket(+el.dataset.n); break;
-    case 'file': openFile(el.dataset.fid, el.dataset.mode); break;
-    case 'rmfile': (PF[el.dataset.key] || []).splice(+el.dataset.i, 1); drawChips(el.dataset.key); break;
-    case 'dash-refresh': viewDash(); break;
-    case 'arch-search': S.arch.q = $('#a-q').value.trim(); archLoad(true); break;
-    case 'arch-more': archLoad(false); break;
-    case 'canned-edit': S.editCanned = +el.dataset.id; viewCanned(); break;
-    case 'canned-cancel': S.editCanned = null; viewCanned(); break;
-    case 'canned-save': saveCanned(el); break;
-    case 'canned-del':
-      if (confirm('Remove this canned reply?')) api('canned_del', { row: +el.dataset.id }).then(() => loadInit(true)).then(viewCanned).then(() => toast('Removed', 'ok')).catch(e => toast(e.message, 'err'));
-      break;
-    case 'audit-load': loadAudit(); break;
-  }
-});
-document.addEventListener('keydown', ev => {
-  if (ev.key === 'Escape') closeDrawer();
-  if (ev.key === 'Enter' && ev.target.classList && ev.target.classList.contains('trow')) openTicket(ev.target.dataset.id);
-  if (ev.key === 'Enter' && !$('#login').classList.contains('hide')) {
-    if (ev.target.id === 'lg-email') sendCode(); else if (ev.target.id === 'lg-code') verifyCode();
-  }
-  if (ev.key === 'Enter' && ev.target.id === 'a-q') { S.arch.q = ev.target.value.trim(); archLoad(true); }
-});
-document.addEventListener('input', ev => {
-  const id = ev.target.id;
-  if (id === 'f-q') { S.f.q = ev.target.value; S.shown = 100; drawList(); }
-  if (id === 'lg-code') ev.target.value = ev.target.value.replace(/\D/g, '').slice(0, 6);
-});
-document.addEventListener('change', ev => {
-  const t = ev.target, id = t.id;
-  const map = { 'f-status': 'status', 'f-priority': 'priority', 'f-cat': 'cat', 'f-who': 'who', 'f-sort': 'sort' };
-  if (map[id]) { S.f[map[id]] = t.value; if (id === 'f-status') S.f.overdue = false; S.shown = 100; drawList(); }
-  if (id === 'd-days') { S.dashDays = +t.value; viewDash(); }
-  if (id === 'canned' && t.value) { insertCanned(t.value); t.value = ''; }
-  if (t.dataset && t.dataset.fpin) { addFiles(t.dataset.fpin, t.files); t.value = ''; }
-});
-document.addEventListener('submit', ev => { if (ev.target.id === 'nt') submitTicket(ev); });
-document.addEventListener('paste', ev => {
-  const ta = ev.target; if (!ta.dataset || !ta.dataset.fpkey) return;
-  const files = Array.from((ev.clipboardData && ev.clipboardData.files) || []);
-  if (files.length) { ev.preventDefault(); addFiles(ta.dataset.fpkey, files); }
-});
-['dragover', 'dragleave', 'drop'].forEach(n => document.addEventListener(n, ev => {
-  const z = ev.target.closest && ev.target.closest('.fp'); if (!z) return;
-  ev.preventDefault();
-  if (n === 'dragover') z.classList.add('drag'); else z.classList.remove('drag');
-  if (n === 'drop') addFiles(z.dataset.fp, ev.dataTransfer.files);
-}));
-$('#lg-send').onclick = sendCode; $('#lg-go').onclick = verifyCode; $('#lg-resend').onclick = resend;
-$('#lg-back').onclick = () => { $('#lg2').classList.add('hide'); $('#lg1').classList.remove('hide'); lgMsg(''); };
-
-/* auto refresh every 2 minutes while the tab is visible and nothing is being edited */
-setInterval(async () => {
-  if (!S.token || !S.user || document.hidden || S.busy || S.view !== 'tickets' || $('#ov').classList.contains('on')) return;
-  const q = $('#f-q'); if (q && document.activeElement === q) return;
-  try { await loadInit(true); viewTickets(); } catch (e) {}
-}, 120000);
-
-/* ===================================================================
-   BOOT
-   =================================================================== */
-(async function boot() {
-  const th = localStorage.getItem('hd_theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  document.documentElement.dataset.theme = th;
-  if (/PASTE_DEPLOYMENT_ID/.test(API)) { $('#setup').classList.remove('hide'); return; }
-  const deep = new URLSearchParams(location.search).get('t');
-  if (deep && /^IT-\d{4}-\d{4}$/.test(deep)) S.deep = deep;
-  if (S.token) {
-    try { await loadInit(true); enterApp(); return; }
-    catch (e) { if (S.token) { S.token = null; localStorage.removeItem('hd_token'); } showLogin(/expired/i.test(e.message) ? 'Your session expired. Please sign in again.' : ''); return; }
-  }
-  showLogin();
-})();
-</script>
+    boot();
+  </script>
 </body>
 </html>
